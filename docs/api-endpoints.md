@@ -1,7 +1,7 @@
 FORMAT: 1A
 HOST: https://api-ruminate.codingstudio.org
 
-# Ruminate API
+# Ruminate API (Version 1)
 
 An API for handling the backend of the [Ruminate Mobile App](https://github.com/codemis/ruminate).  This API stores anf grant access to:
 
