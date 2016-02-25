@@ -1,35 +1,45 @@
-var aglio, gulp, plumber, notify, utils;
-
 /**
  * Include Gulp
  *
  * @type {Object}
  */
-gulp = require('gulp');
+var gulp = require('gulp');
 /**
  * The plumber for allowing errors to pass through
  *
  * @type {Object}
  */
-plumber = require('gulp-plumber');
+var plumber = require('gulp-plumber');
 /**
  * Notify the user
  *
  * @type {Object}
  */
-notify = require('gulp-notify');
+var notify = require('gulp-notify');
 /**
  * Utilities for logging output
  *
  * @type {Object}
  */
-utils = require('gulp-util');
+var utils = require('gulp-util');
 /**
  * Utilities for generating the documentation html
  *
  * @type {Object}
  */
-aglio = require('gulp-aglio');
+var aglio = require('gulp-aglio');
+/**
+ * Utilities for linting the code
+ *
+ * @type {Object}
+ */
+var eslint = require('gulp-eslint');
+/**
+ * Files to lint
+ *
+ * @type {Array}
+ */
+var lintFiles = ['./index.js', './routes/**/*.js'];
 /**
  * Prepare our documentation file with aglio
  */
@@ -39,6 +49,19 @@ gulp.task('prepare:docs', function() {
           .pipe(aglio({ template: 'default', themeFullWidth: true, themeTemplate: 'triple'}))
           .pipe(gulp.dest('docs/html'))
           .pipe(notify({title: 'Docs Refreshed', message: 'We have refreshed the docs!'}));
+});
+/**
+ * Lint the code
+ */
+gulp.task('lint', function() {
+  return gulp.src(lintFiles)
+            .pipe(eslint())
+            .pipe(eslint.format())
+            .pipe(eslint.failOnError())
+            .on('error', notify.onError({message: 'Linting Failed!'}))
+            .on('error', function() {
+              this.emit('end');
+            });
 });
 
 /**
@@ -51,4 +74,10 @@ gulp.task('watch', function() {
   gulp.watch(['./docs/**/*.md'], function() {
     gulp.run('prepare:docs');
   });
+  /**
+   * Watch files for linting
+   */
+   gulp.watch(lintFiles, function() {
+     gulp.run('lint');
+   });
 });
