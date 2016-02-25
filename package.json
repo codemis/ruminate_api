@@ -1,0 +1,19 @@
+{
+  "name": "ruminate-api",
+  "version": "0.1.0",
+  "description": "A NodeJS based API useing the Restify Library to provide an endpoint for managing the daily reflections of all Ruminate Android & iOS Apps.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "restify",
+    "api",
+    "ruminate",
+    "mobile",
+    "apps"
+  ],
+  "author": "Ruminate Team",
+  "license": "UNLICENSED",
+  "private": "true"
+}
