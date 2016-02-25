@@ -7,11 +7,13 @@ routes  = require('./routes/');
 
 server = restify.createServer();
 
-// Default error handler. Personalize according to your needs.
+/**
+ * Handle the default errors
+ */
 server.on('uncaughtException', function (req, res, err) {
   console.log('Error!');
   console.log(err);
-  res.send(500, {"error": "Internal Server Error. The server encountered an unexpected condition."});
+  res.send(500, {"code":"InternalServerError", "message":"The server encountered an unexpected condition."});
 });
 
 routes(restify, server);
