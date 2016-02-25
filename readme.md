@@ -8,4 +8,12 @@ Development
 
 This repository is following the branching technique described in [this blog post](http://nvie.com/posts/a-successful-git-branching-model/), and the semantic version set out on the [Semantic Versioning Website](http://semver.org/).
 
+Notes
+-----
+
+Code structured inspired by [generator-restify](https://github.com/chris-l/generator-restify).
+
+Issues
+------
+
 Questions or problems? Please post them on the [issue tracker](). You can contribute changes by forking the project and submitting a pull request.
