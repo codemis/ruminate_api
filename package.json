@@ -15,5 +15,8 @@
   ],
   "author": "Ruminate Team",
   "license": "UNLICENSED",
-  "private": "true"
+  "private": "true",
+  "dependencies": {
+    "restify": "^4.0.4"
+  }
 }
