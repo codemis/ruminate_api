@@ -13,11 +13,11 @@ var restify = require('restify');
  */
 var routes  = require('./routes/');
 /**
- * The Restify Server
+ * Utilities for file system access
  *
  * @type {Object}
  */
-var server = restify.createServer();
+var fs = require('fs');
 /**
  * Utilities for logging to output
  *
@@ -26,13 +26,19 @@ var server = restify.createServer();
 var Log = require('log');
 var log = new Log('info');
 /**
+ * The Restify Server
+ *
+ * @type {Object}
+ */
+var server = restify.createServer();
+/**
  * Handle the default errors
  */
 server.on('uncaughtException', function (req, res) {
   res.send(500, {"code":"InternalServerError", "message":"The server encountered an unexpected condition."});
 });
 
-routes(restify, server);
+routes(fs, restify, server);
 
 log.info('Server started.');
 
