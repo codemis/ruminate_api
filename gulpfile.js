@@ -67,17 +67,13 @@ gulp.task('lint', function() {
 /**
  * Setup all the watchers
  */
-gulp.task('watch', function() {
+gulp.task('watch', ['prepare:docs', 'lint'], function() {
   /**
    * Watch the documentation
    */
-  gulp.watch(['./docs/**/*.md'], function() {
-    gulp.run('prepare:docs');
-  });
+  gulp.watch('./docs/**/*.md', ['prepare:docs']);
   /**
    * Watch files for linting
    */
-   gulp.watch(lintFiles, function() {
-     gulp.run('lint');
-   });
+   gulp.watch(lintFiles, ['lint']);
 });
