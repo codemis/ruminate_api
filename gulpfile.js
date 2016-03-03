@@ -35,11 +35,35 @@ var aglio = require('gulp-aglio');
  */
 var eslint = require('gulp-eslint');
 /**
+ * Utilities for starting servers
+ *
+ * @type {Object}
+ */
+var nodemon = require('gulp-nodemon');
+/**
+ * Include Gulp mocha
+ *
+ * @type {Object}
+ */
+var mocha  = require('gulp-mocha');
+/**
+ * The Mocha reporter using node-notify
+ *
+ * @type {Object}
+ */
+var notifierReporter = require('mocha-notifier-reporter');
+/**
  * Files to lint
  *
  * @type {Array}
  */
-var lintFiles = ['./index.js', './routes/**/*.js'];
+var lintFiles = ['./config.js', './index.js', './routes/**/*.js'];
+/**
+ * An array of file locations for the test files to be run
+ *
+ * @type {Array}
+ */
+var testFiles = ['./tests/**/*.js'];
 /**
  * Prepare our documentation file with aglio
  */
@@ -63,11 +87,41 @@ gulp.task('lint', function() {
               this.emit('end');
             });
 });
-
+/**
+ * Add a task for running the tests
+ */
+gulp.task('test', function() {
+  return gulp
+    .src(testFiles)
+    .pipe(mocha({reporter: notifierReporter.decorate('spec')}))
+    .on('error', function() {
+      this.emit('end');
+    });
+});
+/**
+ * Run the Development server
+ */
+gulp.task('run', function () {
+  nodemon({
+    script: 'index.js',
+    ext: 'js',
+    env: { 'NODE_ENV': 'development' }
+  });
+});
+/**
+ * Testing Environment
+ */
+gulp.task('run:test-server', function () {
+  nodemon({
+    script: 'index.js',
+    ext: 'js',
+    env: { 'NODE_ENV': 'testing' }
+  }).on('start', ['test']);
+});
 /**
  * Setup all the watchers
  */
-gulp.task('watch', ['prepare:docs', 'lint'], function() {
+gulp.task('watch', ['run:test-server', 'prepare:docs', 'lint'], function() {
   /**
    * Watch the documentation
    */

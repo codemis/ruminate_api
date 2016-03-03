@@ -8,6 +8,10 @@ Development
 
 This repository is following the branching technique described in [this blog post](http://nvie.com/posts/a-successful-git-branching-model/), and the semantic version set out on the [Semantic Versioning Website](http://semver.org/).
 
+To run the server, pass in the appropriate environment (testing, development, production) in your call.
+
+`NODE_ENV=production node app.js`
+
 Notes
 -----
 
@@ -17,3 +21,16 @@ Issues
 ------
 
 Questions or problems? Please post them on the [issue tracker](). You can contribute changes by forking the project and submitting a pull request.
+
+Working Test
+------------
+
+it('should get the page content', function(done) {
+  api.get('/foo')
+    .set('Accept', 'application/json')
+    .end(function(err, res) {
+      res.status.should.equal(404);
+      res.body.code.should.equal('NotFound');
+      done();
+    });
+});

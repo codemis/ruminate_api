@@ -26,6 +26,13 @@ var fs = require('fs');
 var Log = require('log');
 var log = new Log('info');
 /**
+ * Utilities for configuration settings
+ *
+ * @type {Object}
+ */
+var Config = require('./config');
+var config = new Config();
+/**
  * The Restify Server
  *
  * @type {Object}
@@ -42,6 +49,6 @@ routes(fs, restify, server);
 
 log.info('Server started.');
 
-server.listen(8080, function () {
+server.listen(config.port, function () {
   log.info('%s listening at %s', server.name, server.url);
 });
