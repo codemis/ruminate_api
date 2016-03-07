@@ -30,7 +30,7 @@ var log = new Log('info');
  *
  * @type {Object}
  */
-var Config = require('./config');
+var Config = require('./env');
 var config = new Config();
 /**
  * The Restify Server
