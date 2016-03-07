@@ -65,6 +65,12 @@ var lintFiles = ['./config.js', './index.js', './routes/**/*.js'];
  */
 var testFiles = ['./tests/**/*.js'];
 /**
+ * Is the test server running?
+ *
+ * @type {Boolean}
+ */
+var testServerRunning = false;
+/**
  * Prepare our documentation file with aglio
  */
 gulp.task('prepare:docs', function() {
@@ -88,17 +94,6 @@ gulp.task('lint', function() {
             });
 });
 /**
- * Add a task for running the tests
- */
-gulp.task('test', function() {
-  return gulp
-    .src(testFiles)
-    .pipe(mocha({reporter: notifierReporter.decorate('spec')}))
-    .on('error', function() {
-      this.emit('end');
-    });
-});
-/**
  * Run the Development server
  */
 gulp.task('run', function () {
@@ -111,17 +106,28 @@ gulp.task('run', function () {
 /**
  * Testing Environment
  */
-gulp.task('run:test-server', function () {
+gulp.task('test', function () {
   nodemon({
     script: 'index.js',
     ext: 'js',
     env: { 'NODE_ENV': 'testing' }
-  }).on('start', ['test']);
+  }).on('start', ['test-app']);
+});
+/**
+ * Run all the test files.  Do not run this method they wiil fail.
+ */
+gulp.task('test-app', function(){
+  return gulp
+    .src(testFiles)
+    .pipe(mocha({reporter: notifierReporter.decorate('spec')}))
+    .on('error', function() {
+      this.emit('end');
+    });
 });
 /**
  * Setup all the watchers
  */
-gulp.task('watch', ['run:test-server', 'prepare:docs', 'lint'], function() {
+gulp.task('watch', ['test', 'prepare:docs', 'lint'], function() {
   /**
    * Watch the documentation
    */
