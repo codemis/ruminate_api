@@ -2,9 +2,7 @@ var cheerio = require('cheerio');
 var chai = require('chai');
 var expect = chai.expect;
 var supertest = require('supertest');
-var Config = require('../../config');
-var config = new Config();
-var api = supertest('http://localhost::'+config.port);
+var api = supertest('http://localhost:3030');
 
 describe('Routes Static', function() {
 
