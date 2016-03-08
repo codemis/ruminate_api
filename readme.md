@@ -27,16 +27,3 @@ Issues
 ------
 
 Questions or problems? Please post them on the [issue tracker](https://github.com/codemis/ruminate_api/issues). You can contribute changes by forking the project and submitting a pull request.
-
-Working Test
-------------
-
-it('should get the page content', function(done) {
-  api.get('/foo')
-    .set('Accept', 'application/json')
-    .end(function(err, res) {
-      res.status.should.equal(404);
-      res.body.code.should.equal('NotFound');
-      done();
-    });
-});
