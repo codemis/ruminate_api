@@ -1,9 +1,3 @@
-var cheerio = require('cheerio');
-var chai = require('chai');
-var expect = chai.expect;
-var supertest = require('supertest');
-var api = supertest('http://localhost:3030');
-
 describe('Routes Static', function() {
 
   describe('/docs', function() {

@@ -63,7 +63,7 @@ var lintFiles = ['./config.js', './index.js', './routes/**/*.js'];
  *
  * @type {Array}
  */
-var testFiles = ['./tests/**/*.js'];
+var testFiles = ['./tests/integration/**/*.js', './tests/unit/**/*.js'];
 /**
  * Is the test server running?
  *
@@ -116,10 +116,10 @@ gulp.task('test', function () {
 /**
  * Run all the test files.  Do not run this method they wiil fail.
  */
-gulp.task('test-app', function(){
+gulp.task('test-app', function() {
   return gulp
     .src(testFiles)
-    .pipe(mocha({reporter: notifierReporter.decorate('spec')}))
+    .pipe(mocha({require: ['./tests/bootstrap.js'], reporter: notifierReporter.decorate('spec')}))
     .on('error', function() {
       this.emit('end');
     });
