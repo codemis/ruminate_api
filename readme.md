@@ -26,7 +26,7 @@ Code structured inspired by [generator-restify](https://github.com/chris-l/gener
 Issues
 ------
 
-Questions or problems? Please post them on the [issue tracker](). You can contribute changes by forking the project and submitting a pull request.
+Questions or problems? Please post them on the [issue tracker](https://github.com/codemis/ruminate_api/issues). You can contribute changes by forking the project and submitting a pull request.
 
 Working Test
 ------------
