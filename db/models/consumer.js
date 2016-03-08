@@ -1,6 +1,7 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var Consumer = sequelize.define('Consumer', {
+    apiKey: DataTypes.TEXT,
     deviceModel: DataTypes.STRING,
     devicePlatform: DataTypes.STRING,
     deviceVersion: DataTypes.STRING,
