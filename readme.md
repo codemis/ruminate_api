@@ -12,6 +12,12 @@ To run the server, pass in the appropriate environment (testing, development, pr
 
 `NODE_ENV=production node app.js`
 
+Postgres
+--------
+
+* Start the server with: `postgres -D /usr/local/var/postgres`
+* Log into cli: `psql`
+
 Notes
 -----
 

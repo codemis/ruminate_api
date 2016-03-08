@@ -33,6 +33,12 @@ var log = new Log('info');
 var Config = require('./env');
 var config = new Config();
 /**
+ * The Sequelize Model Object
+ *
+ * @type {Sequelize}
+ */
+var models = require('./db/models/index');
+/**
  * The Restify Server
  *
  * @type {Object}
@@ -45,7 +51,7 @@ server.on('uncaughtException', function (req, res) {
   res.send(500, {"code":"InternalServerError", "message":"The server encountered an unexpected condition."});
 });
 
-routes(fs, restify, server);
+routes(fs, restify, server, models);
 
 log.info('Server started.');
 

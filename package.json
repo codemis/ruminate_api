@@ -17,8 +17,12 @@
   "license": "UNLICENSED",
   "private": "true",
   "dependencies": {
+    "pg": "^4.5.1",
+    "pg-hstore": "^2.3.2",
     "restify": "^4.0.4",
-    "restify-errors": "^4.2.0"
+    "restify-errors": "^4.2.0",
+    "sequelize": "^3.19.3",
+    "sequelize-cli": "^2.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
