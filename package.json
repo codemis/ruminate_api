@@ -19,6 +19,7 @@
   "dependencies": {
     "pg": "^4.5.1",
     "pg-hstore": "^2.3.2",
+    "randomstring": "^1.1.4",
     "restify": "^4.0.4",
     "restify-errors": "^4.2.0",
     "sequelize": "^3.19.3",

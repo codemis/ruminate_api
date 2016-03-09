@@ -1,14 +1,14 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var Clients = sequelize.define('Clients', {
+  var Client = sequelize.define('Client', {
     name: DataTypes.STRING,
     applicationId: DataTypes.TEXT
   }, {
     classMethods: {
       associate: function(models) {
-        // associations can be defined here
+        Client.hasMany(models.Consumer);
       }
     }
   });
-  return Clients;
+  return Client;
 };
