@@ -29,7 +29,7 @@ Retrieve the Consumer's information based on the provided API key.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -40,7 +40,7 @@ Retrieve the Consumer's information based on the provided API key.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers
 
   + Body
@@ -72,7 +72,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
 
   + Headers
 
-      X-Client-Id: [Your Client ID]
+      x-client-id: [Your Client ID]
 
   + Body
 
@@ -99,7 +99,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers
 
   + Body
@@ -131,7 +131,7 @@ Update the information for the consumer that belongs to the given API key.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -158,7 +158,7 @@ Update the information for the consumer that belongs to the given API key.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers
 
   + Body
@@ -194,7 +194,7 @@ Retrieve a list of all the Consumer's reflections.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
 
   + Body
@@ -272,7 +272,7 @@ Retrieve a list of all the Consumer's reflections.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -348,7 +348,7 @@ Retrieve a specific Consumer's reflection.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -402,7 +402,7 @@ Retrieve a specific Consumer's reflection.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -451,7 +451,7 @@ Create a new reflection for the Consumer.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -482,7 +482,7 @@ Create a new reflection for the Consumer.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers/reflections/216
 
   + Body
@@ -523,7 +523,7 @@ Update the specific Consumer's reflection.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -554,7 +554,7 @@ Update the specific Consumer's reflection.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers/reflections/216
 
   + Body
@@ -595,7 +595,7 @@ Delete the specific Consumer's reflection.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -623,7 +623,7 @@ Update the Consumer's response.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -652,7 +652,7 @@ Update the Consumer's response.
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
       Location: /consumers/reflections/216
 
   + Body

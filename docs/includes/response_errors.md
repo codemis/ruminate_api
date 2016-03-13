@@ -2,7 +2,7 @@
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -14,7 +14,7 @@
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 
@@ -26,7 +26,7 @@
 
   + Headers
 
-      X-API-Key: [The Consumer's API Key]
+      x-api-key: [The Consumer's API Key]
 
   + Body
 

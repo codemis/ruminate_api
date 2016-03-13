@@ -45,6 +45,10 @@ var models = require('./db/models/index');
  */
 var server = restify.createServer();
 /**
+ * parse the body of the passed parameters
+ */
+server.use(restify.bodyParser({ mapParams: true }));
+/**
  * Handle the default errors
  */
 server.on('uncaughtException', function (req, res) {
