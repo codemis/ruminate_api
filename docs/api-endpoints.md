@@ -62,7 +62,7 @@ Retrieve the Consumer's information based on the provided API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 ## Register [POST /consumers]
 
@@ -121,7 +121,31 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
       "updatedAt": ""
     }
 
-<!-- include(includes/response_errors.md) -->
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The client could not be found on the server."
+    }
+
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The data you provided is malformed or missing."
+    }
+
+<!-- include(includes/response_common_errors.md) -->
 
 ## Update [PUT /consumers]
 
@@ -180,7 +204,7 @@ Update the information for the consumer that belongs to the given API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 # Group Reflections
 
@@ -335,7 +359,7 @@ Retrieve a list of all the Consumer's reflections.
       }
     ]
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 ## Retrieve [GET /consumers/reflections/(reflection_id)]
 
@@ -441,7 +465,7 @@ Retrieve a specific Consumer's reflection.
         "updatedAt": "2016-03-14 20:25:25"
       }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 ## Create [POST /consumers/reflections]
 
@@ -510,7 +534,7 @@ Create a new reflection for the Consumer.
       "updatedAt": ""
     }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 ## Update [PUT /consumers/reflections/(reflection_id)]
 
@@ -582,7 +606,7 @@ Update the specific Consumer's reflection.
       "updatedAt": "2016-02-14 20:35:25"
     }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 ## Delete [DELETE /consumers/reflections/(reflection_id)]
 
@@ -604,7 +628,7 @@ Delete the specific Consumer's reflection.
 
 + Response 204 (application/json)
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
 
 
 # Group Responses
@@ -669,4 +693,4 @@ Update the Consumer's response.
       "updatedAt": "2016-03-14 22:45:25"
     }
 
-<!-- include(includes/response_errors.md) -->
+<!-- include(includes/response_common_errors.md) -->
