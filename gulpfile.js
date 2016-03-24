@@ -134,7 +134,7 @@ gulp.task('test-app', ['reset:test-db'], function() {
  * Reset the testing database
  */
 gulp.task('reset:test-db', shell.task([
-  'node_modules/.bin/sequelize db:migrate:undo --env testing',
+  'node_modules/.bin/sequelize db:migrate:undo:all --env testing',
   'node_modules/.bin/sequelize db:migrate --env testing'
 ],
 {
