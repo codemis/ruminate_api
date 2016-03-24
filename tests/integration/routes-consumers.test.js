@@ -1,8 +1,17 @@
+/**
+ * The random string library
+ *
+ * @return {Object}
+ */
+var randomstring = require('randomstring');
 describe('Routes Consumers', function () {
-  var clientAppId = 'AcmeInc123';
+  var clientAppId = null;
+  var clientId = null;
   beforeEach(function(done) {
+    clientAppId = randomstring.generate();
     models.Client.create({name: 'Acme Inc.', applicationId: clientAppId})
-      .then(function() {
+      .then(function(client) {
+        clientId = client.id;
         done();
       });
   });
@@ -34,7 +43,16 @@ describe('Routes Consumers', function () {
         expect(res.headers.hasOwnProperty('x-api-key')).to.be.true;
         expect(res.headers['x-api-key']).not.to.equal('null');
         expect(res.body.hasOwnProperty('createdAt')).to.be.true;
-        done();
+        models.Consumer.findOne({
+          where: { apiKey: res.headers['x-api-key'] }
+        })
+        .then(function(consumer) {
+          console.log(consumer.ClientId + ' - ' + clientId);
+          expect(consumer.ClientId).to.equal(clientId);
+          done();
+        }).catch(function(error) {
+          done(error);
+        });
       });
     });
 
