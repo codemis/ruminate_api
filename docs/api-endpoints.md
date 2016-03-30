@@ -145,6 +145,18 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
         "error": "Bad Request. The data you provided is malformed or missing."
     }
 
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Validation error: The [field] is missing in the consumer object."
+    }
+
 <!-- include(includes/response_common_errors.md) -->
 
 ## Update [PUT /consumers]

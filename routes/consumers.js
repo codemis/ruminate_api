@@ -68,7 +68,9 @@ function ConsumerController(models) {
           var data = models.Consumer.parseRequest(params);
           client.createConsumer(data)
           .then(function(consumer) {
-            callback(201, 'Not Found. The client could not be found on the server.', consumer);
+            callback(201, 'The Consumer was created.', consumer);
+          }, function(error) {
+            callback(400, prepareErrorMessage(error.message), null);
           });
         } else {
           callback(400, 'Not Found. The client could not be found on the server.', null);
@@ -76,6 +78,25 @@ function ConsumerController(models) {
       });
     }
   };
+
+  /**
+   * Prepare the error message for delivery
+   *
+   * @param  {String} errorMessage The current error message
+   * @return {String}              The modified error message
+   * @access private
+   */
+  function prepareErrorMessage(errorMessage) {
+    var msg = errorMessage
+      .replace('notNull Violation:', 'Validation Error:')
+      .replace('pushReceive', 'push.receive')
+      .replace('pushInterval', 'push.interval')
+      .replace('deviceUUID', 'device.uuid');
+    if(msg.charAt(msg.length-1) !== '.') {
+      msg += '.';
+    }
+    return msg;
+  }
 
   return controller;
 }

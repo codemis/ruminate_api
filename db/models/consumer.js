@@ -14,13 +14,34 @@ module.exports = function(sequelize, DataTypes) {
     deviceModel: DataTypes.STRING,
     devicePlatform: DataTypes.STRING,
     deviceVersion: DataTypes.STRING,
-    deviceUUID: DataTypes.TEXT,
-    pushInterval: DataTypes.INTEGER,
+    deviceUUID: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'The device.uuid is missing in the consumer object.'
+        }
+      }
+    },
+    pushInterval: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     pushToken: DataTypes.TEXT,
-    pushReceive: DataTypes.BOOLEAN,
+    pushReceive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
     pushTimezone: DataTypes.STRING
   },
   {
+    validate: {
+      intervalGreaterThanZero: function() {
+        if ((this.pushInterval === '') || (this.pushInterval <= 0)) {
+          throw new Error('The push.interval is missing or set to zero in the consumer object.');
+        }
+      }
+    },
     classMethods: {
       associate: function(models) {
         Consumer.belongsTo(models.Client);
