@@ -47,7 +47,6 @@ describe('Routes Consumers', function () {
           where: { apiKey: res.headers['x-api-key'] }
         })
         .then(function(consumer) {
-          console.log(consumer.ClientId + ' - ' + clientId);
           expect(consumer.ClientId).to.equal(clientId);
           done();
         }).catch(function(error) {
