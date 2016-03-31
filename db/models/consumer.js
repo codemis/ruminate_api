@@ -27,12 +27,28 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    pushToken: DataTypes.TEXT,
+    pushToken: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'The push.token is missing in the consumer object.'
+        }
+      }
+    },
     pushReceive: {
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
-    pushTimezone: DataTypes.STRING
+    pushTimezone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: 'The push.timezone is missing in the consumer object.'
+        }
+      }
+    }
   },
   {
     validate: {

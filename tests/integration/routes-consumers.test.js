@@ -120,6 +120,32 @@ describe('Routes Consumers', function () {
       });
     });
 
+    it('should require the push.receive', function () {
+      var consumer = {
+        "device": {
+          "model": "Nexus 7",
+          "platform": "Android",
+          "uuid": "07a9454e-b81b-4157-bb94-4c407796a043",
+          "version": "4.4"
+        },
+        "push": {
+          "interval": 120,
+          "timezone": "America/Los_Angeles",
+          "token": "5e7a72d6-d076-11e5-ab30-625662870761"
+        }
+      };
+      api.post('/consumers/register')
+      .send(consumer)
+      .set('Accept', 'application/json')
+      .set('x-client-id', clientAppId)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/push\.receive cannot be null/g)).to.not.equal(null);
+        done();
+      });
+    });
+
     it('should require the push.interval', function () {
       var consumer = {
         "device": {
@@ -147,7 +173,7 @@ describe('Routes Consumers', function () {
       });
     });
 
-    it('should require the push.receive', function () {
+    it('should require the push.timezone', function () {
       var consumer = {
         "device": {
           "model": "Nexus 7",
@@ -156,8 +182,9 @@ describe('Routes Consumers', function () {
           "version": "4.4"
         },
         "push": {
-          "interval": 120,
-          "timezone": "America/Los_Angeles",
+          "interval": 200,
+          "receive": true,
+          "timezone": "",
           "token": "5e7a72d6-d076-11e5-ab30-625662870761"
         }
       };
@@ -168,8 +195,34 @@ describe('Routes Consumers', function () {
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;
-        console.log(res.body.error);
-        expect(res.body.error.match(/push\.receive cannot be null/g)).to.not.equal(null);
+        expect(res.body.error.match(/push\.timezone is missing/g)).to.not.equal(null);
+        done();
+      });
+    });
+
+    it('should require the push.token', function () {
+      var consumer = {
+        "device": {
+          "model": "Nexus 7",
+          "platform": "Android",
+          "uuid": "07a9454e-b81b-4157-bb94-4c407796a043",
+          "version": "4.4"
+        },
+        "push": {
+          "interval": 200,
+          "receive": true,
+          "timezone": "America/Los_Angeles",
+          "token": ""
+        }
+      };
+      api.post('/consumers/register')
+      .send(consumer)
+      .set('Accept', 'application/json')
+      .set('x-client-id', clientAppId)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/push\.token is missing/g)).to.not.equal(null);
         done();
       });
     });
