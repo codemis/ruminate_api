@@ -3,7 +3,7 @@
  */
 'use strict';
 
-module.exports = function (restify, server, models) {
+module.exports = function (restify, server) {
 
   server.get('/docs', restify.serveStatic({
     directory: './docs/html',

@@ -8,6 +8,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      ClientId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Clients',
+          key: 'id'
+        }
+      },
+      apiKey: {
+        type: Sequelize.TEXT
+      },
       deviceModel: {
         type: Sequelize.STRING
       },
@@ -27,15 +37,18 @@ module.exports = {
         type: Sequelize.TEXT
       },
       pushReceive: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
       pushTimezone: {
         type: Sequelize.STRING
       },
       createdAt: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
+        allowNull: false,
         type: Sequelize.DATE
       }
     });

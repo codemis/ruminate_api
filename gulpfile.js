@@ -53,6 +53,12 @@ var mocha  = require('gulp-mocha');
  */
 var notifierReporter = require('mocha-notifier-reporter');
 /**
+ * The Shell library to execute command line commands
+ *
+ * @type {Object}
+ */
+var shell = require('gulp-shell');
+/**
  * Files to lint
  *
  * @type {Array}
@@ -116,7 +122,7 @@ gulp.task('test', function () {
 /**
  * Run all the test files.  Do not run this method they wiil fail.
  */
-gulp.task('test-app', function() {
+gulp.task('test-app', ['reset:test-db'], function() {
   return gulp
     .src(testFiles)
     .pipe(mocha({require: ['./tests/bootstrap.js'], reporter: notifierReporter.decorate('spec')}))
@@ -124,6 +130,16 @@ gulp.task('test-app', function() {
       this.emit('end');
     });
 });
+/**
+ * Reset the testing database
+ */
+gulp.task('reset:test-db', shell.task([
+  'node_modules/.bin/sequelize db:migrate:undo:all --env testing',
+  'node_modules/.bin/sequelize db:migrate --env testing'
+],
+{
+  ignoreErrors: true
+}));
 /**
  * Setup all the watchers
  */
