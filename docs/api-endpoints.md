@@ -62,6 +62,30 @@ Retrieve the Consumer's information based on the provided API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The consumer could not be found on the server."
+    }
+
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The data you provided is malformed or missing."
+    }
+
 <!-- include(includes/response_common_errors.md) -->
 
 ## Register [POST /consumers]
