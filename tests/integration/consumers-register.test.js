@@ -4,7 +4,7 @@
  * @return {Object}
  */
 var randomstring = require('randomstring');
-describe('Routes Consumers', function () {
+describe('Consumers:', function () {
   var clientAppId = null;
   var clientId = null;
   beforeEach(function(done) {
@@ -16,7 +16,7 @@ describe('Routes Consumers', function () {
       });
   });
 
-  describe('/consumers/register', function () {
+  describe('POST /consumers', function () {
     var data = {
       "device": {
         "model": "Nexus 7",
@@ -33,7 +33,7 @@ describe('Routes Consumers', function () {
     };
 
     it('should register a new consumer', function (done) {
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(data)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -56,7 +56,7 @@ describe('Routes Consumers', function () {
     });
 
     it('should require the client id', function (done) {
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(data)
       .set('Accept', 'application/json')
       .end(function(err, res) {
@@ -68,7 +68,7 @@ describe('Routes Consumers', function () {
     });
 
     it('should require a valid client id', function (done) {
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(data)
       .set('Accept', 'application/json')
       .set('x-client-id', 'MADEUP#ID231')
@@ -81,7 +81,7 @@ describe('Routes Consumers', function () {
     });
 
     it('should require the consumer data', function (done) {
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send({})
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -108,7 +108,7 @@ describe('Routes Consumers', function () {
           "token": "5e7a72d6-d076-11e5-ab30-625662870761"
         }
       };
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(consumer)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -134,7 +134,7 @@ describe('Routes Consumers', function () {
           "token": "5e7a72d6-d076-11e5-ab30-625662870761"
         }
       };
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(consumer)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -161,7 +161,7 @@ describe('Routes Consumers', function () {
           "token": "5e7a72d6-d076-11e5-ab30-625662870761"
         }
       };
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(consumer)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -188,7 +188,7 @@ describe('Routes Consumers', function () {
           "token": "5e7a72d6-d076-11e5-ab30-625662870761"
         }
       };
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(consumer)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)
@@ -215,7 +215,7 @@ describe('Routes Consumers', function () {
           "token": ""
         }
       };
-      api.post('/consumers/register')
+      api.post('/consumers')
       .send(consumer)
       .set('Accept', 'application/json')
       .set('x-client-id', clientAppId)

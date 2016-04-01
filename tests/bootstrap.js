@@ -3,6 +3,7 @@
  */
 global.cheerio = require('cheerio');
 var chai = require('chai');
+chai.use(require('chai-shallow-deep-equal'));
 global.expect = chai.expect;
 process.env.NODE_ENV = 'testing';
 var Config = require('./../env');
