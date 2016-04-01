@@ -240,6 +240,41 @@ Update the information for the consumer that belongs to the given API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The client could not be found on the server."
+    }
+
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The data you provided is malformed or missing."
+    }
+
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Validation error: The [field] is missing in the consumer object."
+    }
 <!-- include(includes/response_common_errors.md) -->
 
 # Group Reflections
