@@ -1,11 +1,11 @@
 'use strict';
 
 /**
- * The random string library
+ * The hat library generates random id's and avoids collision
  *
  * @return {Object}
  */
-var randomstring = require('randomstring');
+var hat = require('hat');
 /**
  * Include the underscore library
  * @param  {Object}
@@ -137,7 +137,9 @@ module.exports = function(sequelize, DataTypes) {
    * Add an API key to the new consumer
    */
   Consumer.hook('beforeCreate', function(consumer) {
-    consumer.apiKey = randomstring.generate();
+    if (!consumer.apiKey) {
+      consumer.apiKey = hat();
+    }
   });
 
   return Consumer;
