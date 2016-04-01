@@ -6,6 +6,11 @@
  * @return {Object}
  */
 var randomstring = require('randomstring');
+/**
+ * Include the underscore library
+ * @param  {Object}
+ */
+var _ = require('underscore');
 
 module.exports = function(sequelize, DataTypes) {
   var Consumer = sequelize.define('Consumer',
@@ -69,16 +74,36 @@ module.exports = function(sequelize, DataTypes) {
        * @access public
        */
       parseRequest: function(data) {
-        return {
-          deviceModel:      data.device.model,
-          devicePlatform:   data.device.platform,
-          deviceVersion:    data.device.version,
-          deviceUUID:       data.device.uuid,
-          pushInterval:     data.push.interval,
-          pushToken:        data.push.token,
-          pushReceive:      data.push.receive,
-          pushTimezone:     data.push.timezone
-        };
+        var request = {};
+        if (_.has(data, 'device')) {
+          if (_.has(data.device, 'model')) {
+            request.deviceModel = data.device.model;
+          }
+          if (_.has(data.device, 'platform')) {
+            request.devicePlatform = data.device.platform;
+          }
+          if (_.has(data.device, 'version')) {
+            request.deviceVersion = data.device.version;
+          }
+          if (_.has(data.device, 'uuid')) {
+            request.deviceUUID = data.device.uuid;
+          }
+        }
+        if (_.has(data, 'push')) {
+          if (_.has(data.push, 'interval')) {
+            request.pushInterval = data.push.interval;
+          }
+          if (_.has(data.push, 'token')) {
+            request.pushToken = data.push.token;
+          }
+          if (_.has(data.push, 'receive')) {
+            request.pushReceive = data.push.receive;
+          }
+          if (_.has(data.push, 'timezone')) {
+            request.pushTimezone = data.push.timezone;
+          }
+        }
+        return request;
       }
     },
     instanceMethods: {
