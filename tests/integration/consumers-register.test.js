@@ -4,7 +4,7 @@
  * @return {Object}
  */
 var randomstring = require('randomstring');
-describe('Routes Consumers', function () {
+describe('Consumers:', function () {
   var clientAppId = null;
   var clientId = null;
   beforeEach(function(done) {
@@ -16,7 +16,7 @@ describe('Routes Consumers', function () {
       });
   });
 
-  describe('/consumers', function () {
+  describe('POST /consumers', function () {
     var data = {
       "device": {
         "model": "Nexus 7",

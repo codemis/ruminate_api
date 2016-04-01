@@ -5,7 +5,7 @@
  */
 var randomstring = require('randomstring');
 
-describe('Routes Consumers', function () {
+describe('Consumers:', function () {
   var consumer = '';
   var apiKey = '';
 
@@ -40,7 +40,7 @@ describe('Routes Consumers', function () {
       });
   });
 
-  describe('/consumers', function () {
+  describe('GET /consumers', function () {
 
     it('should retrieve the consumer data', function (done) {
       api.get('/consumers')
