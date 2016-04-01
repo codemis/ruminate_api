@@ -36,7 +36,7 @@ module.exports = function (restify, server, models) {
   /**
    * POST: Register a new consumer
    */
-  server.post('/consumers/register', function(req, res) {
+  server.post('/consumers', function(req, res) {
     controller.create(req.headers, req.params, function(status, message, consumer) {
       if (status === 201) {
         if (consumer) {
