@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "title": "The Reflection Object",
-  "description": "An object containing information about the reflection.",
+  "title": "The Rumination Object",
+  "description": "An object containing information about the rumination.",
   "type": "object",
   "properties": {
     "passage": {
