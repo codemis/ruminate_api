@@ -66,6 +66,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Consumer.belongsTo(models.Client);
+        Consumer.hasMany(models.Rumination);
       },
       /**
        * Parse the request data to create the Consumer object
