@@ -145,7 +145,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
       "updatedAt": ""
     }
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
   + Headers
 
@@ -154,7 +154,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
   + Body
 
     {
-        "error": "Bad Request. The client could not be found on the server."
+        "error": "Not Found. The client could not be found on the server."
     }
 
 + Response 400 (application/json)
@@ -240,7 +240,7 @@ Update the information for the consumer that belongs to the given API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
   + Headers
 
@@ -249,7 +249,7 @@ Update the information for the consumer that belongs to the given API key.
   + Body
 
     {
-        "error": "Bad Request. The client could not be found on the server."
+        "error": "Not Found. The consumer could not be found on the server."
     }
 
 + Response 400 (application/json)
@@ -275,6 +275,7 @@ Update the information for the consumer that belongs to the given API key.
     {
         "error": "Validation error: The [field] is missing in the consumer object."
     }
+
 <!-- include(includes/response_common_errors.md) -->
 
 # Group Ruminations
@@ -603,6 +604,18 @@ Create a new rumination for the Consumer.
       "responses": [],
       "createdAt": "2016-02-14 20:25:25",
       "updatedAt": ""
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
     }
 
 <!-- include(includes/response_common_errors.md) -->
