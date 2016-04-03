@@ -9,6 +9,12 @@
  * @param  {Object}
  */
 var _ = require('underscore');
+/**
+ * Get the objectIsEmpty Utility
+ *
+ * @param {Object}
+ */
+var isObjectEmpty = require('../utilities/is-object-empty');
 
 module.exports = function (restify, server, models) {
 
@@ -57,24 +63,42 @@ function RuminationsController(models) {
    * @access public
    */
   controller.create = function(headers, params, callback) {
-    models.Consumer.findOne({
-      apiKey: headers['x-api-key']
-    }).then(function(consumer) {
-      if (consumer) {
-        var data = models.Rumination.parseRequest(params);
-        consumer.createRumination(data)
-        .then(function(rumination) {
-          callback(201, 'The Rumination was created.', consumer, rumination);
-        }, function(error) {
-          callback(400, prepareErrorMessage(error.message), null, null);
-        });
-      } else {
-        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
-      }
-    }, function() {
+    if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
-    });
+    } else if ((isObjectEmpty(params)) || (isObjectEmpty(params.passage))) {
+      callback(400, 'Bad Request. The data you provided is malformed or missing.', null, null);
+    } else {
+      models.Consumer.findOne({
+        where: { apiKey: headers['x-api-key'] }
+      }).then(function(consumer) {
+        if (consumer) {
+          var data = models.Rumination.parseRequest(params);
+          consumer.createRumination(data)
+          .then(function(rumination) {
+            callback(201, 'The Rumination was created.', consumer, rumination);
+          }, function(error) {
+            callback(400, error.message, null, null);
+          });
+        } else {
+          callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+        }
+      }, function() {
+        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+      });
+    }
   };
+
+  /**
+   * Does the header exist and is set?
+   *
+   * @param  {Object}  headers The supplied headers
+   * @param  {String}  key     The name of the expected header
+   * @return {Boolean}         Does it exist, and is set to a value?
+   * @access private
+   */
+  function hasHeader(headers, key) {
+    return (_.has(headers, key))  && (headers[key] !== '');
+  }
 
   return controller;
 }

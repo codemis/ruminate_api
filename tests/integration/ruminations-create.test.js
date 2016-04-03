@@ -88,6 +88,51 @@ describe('Ruminations:', function () {
           });
         });
     });
+
+    it('should require an api key', function (done) {
+      api.post('/consumers/ruminations')
+        .send(data)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
+          done();
+        }, function(error) {
+          done(error);
+        });
+    });
+
+    it('should require a valid api key', function (done) {
+      api.post('/consumers/ruminations')
+        .send(data)
+        .set('Accept', 'application/json')
+        .set('x-api-key', 'IAMFAKE#321')
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
+          done();
+        }, function(error) {
+          done(error);
+        });
+    });
+
+    it('should require rumination data', function (done) {
+      api.post('/consumers/ruminations')
+        .send({passage: {}})
+        .set('Accept', 'application/json')
+        .set('x-api-key', apiKey)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/malformed or missing/g)).to.not.equal(null);
+          done();
+        }, function(error) {
+          done(error);
+        });
+    });
+
   });
 
 });
