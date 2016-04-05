@@ -47,6 +47,7 @@ module.exports = function (restify, server, models) {
       if (status === 201) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
+          res.header('Location', '/consumers/ruminations/'+rumination.id);
           res.send(201, rumination.toResponse());
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
@@ -118,30 +119,51 @@ function RuminationsController(models) {
    * @access public
    */
   controller.update = function(headers, params, callback) {
-    models.Consumer.findOne({
-      where: { apiKey: headers['x-api-key'] }
-    }).then(function(consumer) {
-      if (consumer) {
-        var data = models.Rumination.parseRequest(params);
-        models.Rumination.update(data, {
-          where: {id: params.ruminationId }
-        }).then(function() {
-          models.Rumination.findOne({
-            where: {id: params.ruminationId }
-          }).then(function(rumination) {
-            callback(201, 'The Rumination has been updated.', consumer, rumination);
-          }, function(error) {
-            callback(400, error.message, consumer, null);
-          });
-        }, function(error) {
-          callback(400, error.message, consumer, null);
-        });
-      } else {
-        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
-      }
-    }, function() {
+    if (!params.ruminationId) {
+      callback(404, 'Not Found. The rumination could not be found on the server.', null, null);
+    } else if ((isObjectEmpty(params)) || (isObjectEmpty(params.passage))) {
+      callback(400, 'Bad Request. The data you provided is malformed or missing.', null, null);
+    } else if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
-    });
+    } else {
+      models.Rumination.findOne({
+        where: {id: params.ruminationId }
+      }).then(function(rumination) {
+        if (rumination) {
+          models.Consumer.findOne({
+            where: { apiKey: headers['x-api-key'] }
+          }).then(function(consumer) {
+            if (consumer) {
+              /**
+               * Update the Rumination
+               */
+              var data = models.Rumination.parseRequest(params);
+              models.Rumination.update(data, {
+                where: {id: params.ruminationId }
+              }).then(function() {
+                models.Rumination.findOne({
+                  where: {id: params.ruminationId }
+                }).then(function(rumination) {
+                  callback(201, 'The Rumination has been updated.', consumer, rumination);
+                }, function(error) {
+                  callback(400, error.message, consumer, null);
+                });
+              }, function(error) {
+                callback(400, error.message, consumer, null);
+              });
+            } else {
+              callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+            }
+          }, function() {
+            callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+          });
+        } else {
+          callback(404, 'Not Found. The rumination could not be found on the server.', null, null);
+        }
+      }, function(error) {
+        callback(400, error.message, null, null);
+      });
+    }
   };
 
   /**

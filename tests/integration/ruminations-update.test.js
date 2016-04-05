@@ -70,16 +70,15 @@ describe('Ruminations:', function () {
   });
 
   describe('PUT /consumers/ruminations', function () {
-
-    it('should update a rumination', function (done) {
-      var data = {
-        "passage": {
-          "snippet": "Blessed is the man who walks not in the counsel of the wicked...",
-          "first": {
-            "verse": 1
-          }
+    var data = {
+      "passage": {
+        "snippet": "Blessed is the man who walks not in the counsel of the wicked...",
+        "first": {
+          "verse": 1
         }
-      };
+      }
+    };
+    it('should update a rumination', function (done) {
       api.put('/consumers/ruminations/'+ruminationId)
         .send(data)
         .set('Accept', 'application/json')
@@ -87,6 +86,8 @@ describe('Ruminations:', function () {
         .end(function(err, res) {
           expect(res.ok).to.be.true;
           expect(res.status).to.equal(201);
+          expect(res.headers.hasOwnProperty('location')).to.be.true;
+          expect(res.headers['location']).to.equal('/consumers/ruminations/'+ruminationId);
           expect(res.body.passage.snippet).to.equal('Blessed is the man who walks not in the counsel of the wicked...');
           expect(res.body.passage.first.verse).to.equal(1);
           expect(res.body.hasOwnProperty('updatedAt')).to.be.true;
@@ -101,6 +102,72 @@ describe('Ruminations:', function () {
           }, function(error) {
             done(error);
           });
+        });
+    });
+
+    it('should require a valid api key', function (done) {
+      api.put('/consumers/ruminations/'+ruminationId)
+        .send(data)
+        .set('Accept', 'application/json')
+        .set('x-api-key', 'FAKEAPIKEY%$$##12')
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('should require an api key', function (done) {
+      api.put('/consumers/ruminations/'+ruminationId)
+        .send(data)
+        .set('Accept', 'application/json')
+        .end(function(err, res) {
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('should require a ruminationId in the URL', function (done) {
+      api.put('/consumers/ruminations/')
+        .send(data)
+        .set('Accept', 'application/json')
+        .set('x-api-key', apiKey)
+        .end(function(err, res) {
+          expect(res.ok).to.be.false;
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/rumination could not be found/g)).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('should require a valid ruminationId in the URL', function (done) {
+      api.put('/consumers/ruminations/10239384')
+        .send(data)
+        .set('Accept', 'application/json')
+        .set('x-api-key', apiKey)
+        .end(function(err, res) {
+          expect(res.ok).to.be.false;
+          expect(res.status).to.equal(404);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/rumination could not be found/g)).to.not.equal(null);
+          done();
+        });
+    });
+
+    it('should require rumination data', function (done) {
+      api.put('/consumers/ruminations/'+ruminationId)
+        .send({})
+        .set('Accept', 'application/json')
+        .set('x-api-key', apiKey)
+        .end(function(err, res) {
+          expect(res.status).to.equal(400);
+          expect(res.body.hasOwnProperty('error')).to.be.true;
+          expect(res.body.error.match(/malformed or missing/g)).to.not.equal(null);
+          done();
         });
     });
 
