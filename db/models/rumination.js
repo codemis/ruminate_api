@@ -79,6 +79,7 @@ module.exports = function(sequelize, DataTypes) {
        */
       toResponse: function() {
         return {
+          id: this.id,
           passage: {
             version:          this.passageVersion,
             snippet:          this.passageSnippet,

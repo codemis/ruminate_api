@@ -91,6 +91,8 @@ describe('Ruminations:', function () {
           expect(res.body.passage.snippet).to.equal('Blessed is the man who walks not in the counsel of the wicked...');
           expect(res.body.passage.first.verse).to.equal(1);
           expect(res.body.hasOwnProperty('updatedAt')).to.be.true;
+          expect(res.body.hasOwnProperty('id')).to.be.true;
+          expect(res.body.id).to.equal(ruminationId);
           models.Rumination.findOne({
             where: { id: ruminationId }
           }).then(function(rumination) {
