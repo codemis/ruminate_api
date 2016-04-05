@@ -71,6 +71,8 @@ describe('Ruminations:', function () {
           expect(res.ok).to.be.true;
           expect(res.status).to.equal(201);
           expect(res.body.hasOwnProperty('createdAt')).to.be.true;
+          expect(res.headers.hasOwnProperty('location')).to.be.true;
+          expect(res.headers['location']).to.not.equal(null);
           models.Rumination.findOne({
             passageVersion: version
           }).then(function(rumination) {

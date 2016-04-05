@@ -28,6 +28,7 @@ module.exports = function (restify, server, models) {
       if (status === 201) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
+          res.header('location', '/consumers/ruminations/'+rumination.id);
           res.send(201, rumination.toResponse());
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
@@ -47,7 +48,7 @@ module.exports = function (restify, server, models) {
       if (status === 201) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
-          res.header('Location', '/consumers/ruminations/'+rumination.id);
+          res.header('location', '/consumers/ruminations/'+rumination.id);
           res.send(201, rumination.toResponse());
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
