@@ -85,7 +85,7 @@ describe('Ruminations:', function () {
         .set('x-api-key', apiKey)
         .end(function(err, res) {
           expect(res.ok).to.be.true;
-          expect(res.status).to.equal(201);
+          expect(res.status).to.equal(200);
           expect(res.headers.hasOwnProperty('location')).to.be.true;
           expect(res.headers['location']).to.equal('/consumers/ruminations/'+ruminationId);
           expect(res.body.passage.snippet).to.equal('Blessed is the man who walks not in the counsel of the wicked...');

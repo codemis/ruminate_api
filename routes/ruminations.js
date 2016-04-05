@@ -29,7 +29,7 @@ module.exports = function (restify, server, models) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
           res.header('location', '/consumers/ruminations/'+rumination.id);
-          res.send(201, rumination.toResponse());
+          res.send(status, rumination.toResponse());
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
         }
@@ -45,11 +45,11 @@ module.exports = function (restify, server, models) {
    */
   server.put('/consumers/ruminations/:ruminationId', function(req, res) {
     controller.update(req.headers, req.params, function(status, message, consumer, rumination) {
-      if (status === 201) {
+      if (status === 200) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
           res.header('location', '/consumers/ruminations/'+rumination.id);
-          res.send(201, rumination.toResponse());
+          res.send(status, rumination.toResponse());
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
         }
@@ -145,7 +145,7 @@ function RuminationsController(models) {
                 models.Rumination.findOne({
                   where: {id: params.ruminationId }
                 }).then(function(rumination) {
-                  callback(201, 'The Rumination has been updated.', consumer, rumination);
+                  callback(200, 'The Rumination has been updated.', consumer, rumination);
                 }, function(error) {
                   callback(400, error.message, consumer, null);
                 });
