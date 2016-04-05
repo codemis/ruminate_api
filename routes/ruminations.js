@@ -60,6 +60,17 @@ module.exports = function (restify, server, models) {
     });
   });
 
+  server.del('/consumers/ruminations/:ruminationId', function(req, res) {
+    controller.delete(req.headers, req.params, function(status, message) {
+      res.header('x-api-key', req.headers['x-api-key']);
+      if (status === 204) {
+        res.send(status, '');
+      } else {
+        res.send(status, { 'error': message });
+      }
+    });
+  });
+
 };
 /**
  * The Ruminations Controller
@@ -127,9 +138,8 @@ function RuminationsController(models) {
     } else if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
     } else {
-      models.Rumination.findOne({
-        where: {id: params.ruminationId }
-      }).then(function(rumination) {
+      models.Rumination.findById(params.ruminationId)
+      .then(function(rumination) {
         if (rumination) {
           models.Consumer.findOne({
             where: { apiKey: headers['x-api-key'] }
@@ -140,7 +150,10 @@ function RuminationsController(models) {
                */
               var data = models.Rumination.parseRequest(params);
               models.Rumination.update(data, {
-                where: {id: params.ruminationId }
+                where: {
+                  id: params.ruminationId,
+                  ConsumerId: consumer.id
+                }
               }).then(function() {
                 models.Rumination.findOne({
                   where: {id: params.ruminationId }
@@ -163,6 +176,54 @@ function RuminationsController(models) {
         }
       }, function(error) {
         callback(400, error.message, null, null);
+      });
+    }
+  };
+
+  /**
+   * Delete the Consumer's Rumination
+   *
+   * @param  {Object}   headers  The headers passed to the API
+   * @param  {Object}   params   The parameters passed to the API
+   * @param  {Function} callback The method to callback when completed
+   * @return {Void}
+   *
+   * @access public
+   */
+  controller.delete = function(headers, params, callback) {
+    if (!params.ruminationId) {
+      callback(404, 'Not Found. The rumination could not be found on the server.');
+    } else if (!hasHeader(headers, 'x-api-key')) {
+      callback(404, 'Not Found. The consumer could not be found on the server.');
+    } else {
+      models.Rumination.findById(params.ruminationId)
+      .then(function(rumination) {
+        if (rumination) {
+          models.Consumer.findOne({
+            where: { apiKey: headers['x-api-key'] }
+          }).then(function(consumer) {
+            if (consumer) {
+              models.Rumination.destroy({
+                where: {
+                  id: params.ruminationId,
+                  ConsumerId: consumer.id
+                }
+              }).then(function() {
+                callback(204, '');
+              }, function(error) {
+                callback(400, error.message);
+              });
+            } else {
+              callback(404, 'Not Found. The consumer could not be found on the server.');
+            }
+          }, function() {
+            callback(404, 'Not Found. The consumer could not be found on the server.');
+          });
+        } else {
+          callback(404, 'Not Found. The rumination could not be found on the server.');
+        }
+      }, function(error) {
+        callback(400, error.message);
       });
     }
   };
