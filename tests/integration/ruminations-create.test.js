@@ -83,8 +83,6 @@ describe('Ruminations:', function () {
             expect(rumination.lastVerse).to.equal(3);
             expect(rumination.consumerId).to.equal(consumer.id);
             done();
-          }, function(error) {
-            done(error);
           });
         });
     });
@@ -98,8 +96,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
@@ -113,8 +109,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
@@ -128,8 +122,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/malformed or missing/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
