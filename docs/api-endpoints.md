@@ -41,7 +41,7 @@ Retrieve the Consumer's information based on the provided API key.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers
+      location: /consumers
 
   + Body
 
@@ -124,7 +124,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers
+      location: /consumers
 
   + Body
 
@@ -219,7 +219,7 @@ Update the information for the consumer that belongs to the given API key.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers
+      location: /consumers
 
   + Body
 
@@ -579,7 +579,7 @@ Create a new rumination for the Consumer.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/ruminations/216
+      location: /consumers/ruminations/216
 
   + Body
 
@@ -663,7 +663,7 @@ Update the specific Consumer's rumination.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/ruminations/216
+      location: /consumers/ruminations/216
 
   + Body
 
@@ -688,6 +688,30 @@ Update the specific Consumer's rumination.
       "responses": [],
       "createdAt": "2016-02-14 20:25:25",
       "updatedAt": "2016-02-14 20:35:25"
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The rumination could not be found on the server."
     }
 
 <!-- include(includes/response_common_errors.md) -->
@@ -761,7 +785,7 @@ Update the Consumer's response.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/ruminations/216
+      location: /consumers/ruminations/216
 
   + Body
 

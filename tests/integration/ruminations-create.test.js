@@ -71,6 +71,8 @@ describe('Ruminations:', function () {
           expect(res.ok).to.be.true;
           expect(res.status).to.equal(201);
           expect(res.body.hasOwnProperty('createdAt')).to.be.true;
+          expect(res.headers.hasOwnProperty('location')).to.be.true;
+          expect(res.headers['location']).to.not.equal(null);
           models.Rumination.findOne({
             passageVersion: version
           }).then(function(rumination) {
@@ -83,8 +85,6 @@ describe('Ruminations:', function () {
             expect(rumination.lastVerse).to.equal(3);
             expect(rumination.consumerId).to.equal(consumer.id);
             done();
-          }, function(error) {
-            done(error);
           });
         });
     });
@@ -98,8 +98,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
@@ -113,8 +111,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
@@ -128,8 +124,6 @@ describe('Ruminations:', function () {
           expect(res.body.hasOwnProperty('error')).to.be.true;
           expect(res.body.error.match(/malformed or missing/g)).to.not.equal(null);
           done();
-        }, function(error) {
-          done(error);
         });
     });
 
