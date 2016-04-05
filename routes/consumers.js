@@ -127,7 +127,7 @@ function ConsumersController(models) {
    */
   controller.create = function(headers, params, callback) {
     if (!hasHeader(headers, 'x-client-id')) {
-      callback(400, 'Bad Request. The client could not be found on the server.', null);
+      callback(404, 'Not Found. The client could not be found on the server.', null);
     } else if ((isObjectEmpty(params)) || (isObjectEmpty(params.device)) || (isObjectEmpty(params.push))) {
       callback(400, 'Bad Request. The data you provided is malformed or missing.', null);
     } else {
@@ -162,7 +162,7 @@ function ConsumersController(models) {
    */
   controller.update = function(headers, params, callback) {
     if (!hasHeader(headers, 'x-api-key')) {
-      callback(400, 'Bad Request. The consumer could not be found on the server.', null);
+      callback(404, 'Not Found. The consumer could not be found on the server.', null);
     } else if (isObjectEmpty(params)) {
       callback(400, 'Bad Request. The data you provided is malformed or missing.', null);
     } else {

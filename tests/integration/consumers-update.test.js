@@ -85,7 +85,7 @@ describe('Consumers:', function () {
       .send(updatedData)
       .set('Accept', 'application/json')
       .end(function(err, res) {
-        expect(res.status).to.equal(400);
+        expect(res.status).to.equal(404);
         expect(res.body.hasOwnProperty('error')).to.be.true;
         expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
         done();

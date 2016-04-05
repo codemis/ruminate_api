@@ -39,7 +39,7 @@
         "properties": {
           "interval": {
             "title": "The Time Between Each Push Notification",
-            "description": "The number of seconds between each push notification and reflection question.",
+            "description": "The number of seconds between each push notification and rumination question.",
             "type": "integer"
           },
           "receive": {

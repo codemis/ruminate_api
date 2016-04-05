@@ -6,8 +6,8 @@ HOST: https://api-ruminate.codingstudio.org
 An API for handling the backend of the [Ruminate Mobile App](https://github.com/codemis/ruminate).  This API stores anf grant access to:
 
   * Consumers - The various people using the Ruminate App.
-  * Reflections - The Bible passages these Consumers are reflecting on.
-  * Responses - The Consumer's answers to questions that challenge them to continue their Reflections.
+  * Ruminations - The Bible passages these Consumers are reflecting on.
+  * Responses - The Consumer's answers to questions that challenge them to continue their Ruminations.
 
 This API is a [REST](https://en.wikipedia.org/wiki/Representational_state_transfer) based API that returns JSON responses.  **In order to use this API, you will need a Client ID.**  Please contact us at [johnathan[at]jpulos.com](#), if you are interested in using this API.
 
@@ -145,7 +145,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
       "updatedAt": ""
     }
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
   + Headers
 
@@ -154,7 +154,7 @@ Register a new Consumer, and retrieve an API key.  **You will need a Client ID t
   + Body
 
     {
-        "error": "Bad Request. The client could not be found on the server."
+        "error": "Not Found. The client could not be found on the server."
     }
 
 + Response 400 (application/json)
@@ -240,7 +240,7 @@ Update the information for the consumer that belongs to the given API key.
       "updatedAt": "2016-03-14 20:25:25"
     }
 
-+ Response 400 (application/json)
++ Response 404 (application/json)
 
   + Headers
 
@@ -249,7 +249,7 @@ Update the information for the consumer that belongs to the given API key.
   + Body
 
     {
-        "error": "Bad Request. The client could not be found on the server."
+        "error": "Not Found. The consumer could not be found on the server."
     }
 
 + Response 400 (application/json)
@@ -275,17 +275,18 @@ Update the information for the consumer that belongs to the given API key.
     {
         "error": "Validation error: The [field] is missing in the consumer object."
     }
+
 <!-- include(includes/response_common_errors.md) -->
 
-# Group Reflections
+# Group Ruminations
 
-A consumer's reflection on a passage of Scripture.
+A consumer's rumination on a passage of Scripture.
 
-## Retrieve All [GET /consumers/reflections]
+## Retrieve All [GET /consumers/ruminations]
 
-Retrieve a list of all the Consumer's reflections.
+Retrieve a list of all the Consumer's ruminations.
 
-+ Request Retrieve All Reflections (application/json)
++ Request Retrieve All Ruminations (application/json)
 
   + Headers
 
@@ -296,7 +297,7 @@ Retrieve a list of all the Consumer's reflections.
 
       {
         "sortOrder": {
-          "reflections": {
+          "ruminations": {
             "field": "createdAt",
             "direction": "desc"
           },
@@ -311,7 +312,7 @@ Retrieve a list of all the Consumer's reflections.
 
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
-        "title": "The Reflection Options Object",
+        "title": "The Rumination Options Object",
         "description": "An options object for setting sort order on the returned results.",
         "type": "object",
         "properties": {
@@ -320,9 +321,9 @@ Retrieve a list of all the Consumer's reflections.
             "description": "Options for sorting the needed data.",
             "type": "object",
             "properties": {
-              "reflections": {
-                "title": "Sort Options for Reflections",
-                "description": "Define how you want the reflections to be sorted.",
+              "ruminations": {
+                "title": "Sort Options for Ruminations",
+                "description": "Define how you want the ruminations to be sorted.",
                 "type": "object",
                 "properties": {
                   "field": {
@@ -432,14 +433,14 @@ Retrieve a list of all the Consumer's reflections.
 
 <!-- include(includes/response_common_errors.md) -->
 
-## Retrieve [GET /consumers/reflections/(reflection_id)]
+## Retrieve [GET /consumers/ruminations/(rumination_id)]
 
-Retrieve a specific Consumer's reflection.
+Retrieve a specific Consumer's rumination.
 
 + Parameters
-    + reflection_id (number) - ID of the specific reflection to retrieve.
+    + rumination_id (number) - ID of the specific rumination to retrieve.
 
-+ Request Retrieve A Reflection (application/json)
++ Request Retrieve A Rumination (application/json)
 
   + Headers
 
@@ -460,7 +461,7 @@ Retrieve a specific Consumer's reflection.
 
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
-        "title": "The Reflection Options Object",
+        "title": "The Rumination Options Object",
         "description": "An options object for setting sort order on the returned results.",
         "type": "object",
         "properties": {
@@ -538,11 +539,11 @@ Retrieve a specific Consumer's reflection.
 
 <!-- include(includes/response_common_errors.md) -->
 
-## Create [POST /consumers/reflections]
+## Create [POST /consumers/ruminations]
 
-Create a new reflection for the Consumer.
+Create a new rumination for the Consumer.
 
-+ Request Create A Reflection (application/json)
++ Request Create A Rumination (application/json)
 
   + Headers
 
@@ -571,14 +572,14 @@ Create a new reflection for the Consumer.
 
   + Schema
 
-      <!-- include(includes/schemas/reflection.md) -->
+      <!-- include(includes/schemas/rumination.md) -->
 
 + Response 201 (application/json)
 
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/reflections/216
+      Location: /consumers/ruminations/216
 
   + Body
 
@@ -605,16 +606,28 @@ Create a new reflection for the Consumer.
       "updatedAt": ""
     }
 
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
+    }
+
 <!-- include(includes/response_common_errors.md) -->
 
-## Update [PUT /consumers/reflections/(reflection_id)]
+## Update [PUT /consumers/ruminations/(rumination_id)]
 
-Update the specific Consumer's reflection.
+Update the specific Consumer's rumination.
 
 + Parameters
-    + reflection_id (number) - ID of the specific reflection to update.
+    + rumination_id (number) - ID of the specific rumination to update.
 
-+ Request Retrieve A Reflection (application/json)
++ Request Retrieve A Rumination (application/json)
 
   + Headers
 
@@ -643,14 +656,14 @@ Update the specific Consumer's reflection.
 
   + Schema
 
-      <!-- include(includes/schemas/reflection.md) -->
+      <!-- include(includes/schemas/rumination.md) -->
 
 + Response 200 (application/json)
 
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/reflections/216
+      Location: /consumers/ruminations/216
 
   + Body
 
@@ -679,14 +692,14 @@ Update the specific Consumer's reflection.
 
 <!-- include(includes/response_common_errors.md) -->
 
-## Delete [DELETE /consumers/reflections/(reflection_id)]
+## Delete [DELETE /consumers/ruminations/(rumination_id)]
 
-Delete the specific Consumer's reflection.
+Delete the specific Consumer's rumination.
 
 + Parameters
-    + reflection_id (number) - ID of the specific reflection to delete.
+    + rumination_id (number) - ID of the specific rumination to delete.
 
-+ Request Delete A Reflection (application/json)
++ Request Delete A Rumination (application/json)
 
   + Headers
 
@@ -704,14 +717,14 @@ Delete the specific Consumer's reflection.
 
 # Group Responses
 
-Each reflection has one or more responses to a series of questions asked through out the day.  A Cron job adds a question, and a blank response to a reflection at the Consumer's set push interval, and then pushes a notification to respond.  Since the creation of the responses is made by the Cron job, you only have access to update the response.
+Each rumination has one or more responses to a series of questions asked through out the day.  A Cron job adds a question, and a blank response to a rumination at the Consumer's set push interval, and then pushes a notification to respond.  Since the creation of the responses is made by the Cron job, you only have access to update the response.
 
-## Update [PUT /consumers/reflections/(reflection_id)/responses/(response_id)]
+## Update [PUT /consumers/ruminations/(rumination_id)/responses/(response_id)]
 
 Update the Consumer's response.
 
 + Parameters
-    + reflection_id (number) - ID of the specific reflection the response belongs to.
+    + rumination_id (number) - ID of the specific rumination the response belongs to.
     + response_id (number) - ID of the specific response to update.
 
 + Request Update a Response (application/json)
@@ -730,7 +743,7 @@ Update the Consumer's response.
 
       {
         "$schema": "http://json-schema.org/draft-04/schema#",
-        "title": "The Reflection Options Object",
+        "title": "The Rumination Options Object",
         "description": "An options object for setting sort order on the returned results.",
         "type": "object",
         "properties": {
@@ -748,7 +761,7 @@ Update the Consumer's response.
   + Headers
 
       x-api-key: [The Consumer's API Key]
-      Location: /consumers/reflections/216
+      Location: /consumers/ruminations/216
 
   + Body
 
