@@ -499,6 +499,7 @@ Retrieve a specific Consumer's rumination.
   + Headers
 
       x-api-key: [The Consumer's API Key]
+      location: /consumers/ruminations/213
 
   + Body
 
@@ -536,6 +537,30 @@ Retrieve a specific Consumer's rumination.
         "createdAt": "2016-02-14 20:25:25",
         "updatedAt": "2016-03-14 20:25:25"
       }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The rumination could not be found on the server."
+    }
 
 <!-- include(includes/response_common_errors.md) -->
 
