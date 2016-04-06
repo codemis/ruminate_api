@@ -21,6 +21,26 @@ module.exports = function (restify, server, models) {
   var controller = RuminationsController(models);
 
   /**
+   * GET: Get an individaul rumination
+   */
+  server.get('/consumers/ruminations/:ruminationId', function(req, res) {
+    controller.show(req.headers, req.params, function(status, message, consumer, rumination) {
+      if (status === 200) {
+        res.header('x-api-key', req.headers['x-api-key']);
+        if (rumination) {
+          res.header('location', '/consumers/ruminations/'+rumination.id);
+          res.send(status, rumination.toResponse());
+        } else {
+          res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
+        }
+      } else {
+        res.header('x-api-key', req.headers['x-api-key']);
+        res.send(status, { 'error': message });
+      }
+    });
+  });
+
+  /**
    * POST: Create a Rumination for the Consumer
    */
   server.post('/consumers/ruminations', function(req, res) {
@@ -83,6 +103,49 @@ function RuminationsController(models) {
    * @param {Object}
    */
   var controller = new Object();
+
+  /**
+   * Find a Rumination
+   *
+   * @param  {Object}   headers  The headers passed to the API
+   * @param  {Object}   params   The parameters passed to the API
+   * @param  {Function} callback The method to callback when completed
+   * @return {Void}
+   *
+   * @access public
+   */
+  controller.show = function(headers, params, callback) {
+    if (!params.ruminationId) {
+      callback(404, 'Not Found. The rumination could not be found on the server.', null, null);
+    } else if (!hasHeader(headers, 'x-api-key')) {
+      callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+    } else {
+      models.Consumer.findOne({
+        where: { apiKey: headers['x-api-key'] }
+      }).then(function(consumer) {
+        if (consumer) {
+          models.Rumination.findOne({
+            where: {
+              id: params.ruminationId,
+              ConsumerId: consumer.id
+            }
+          }).then(function(rumination) {
+            if (rumination) {
+              callback(200, 'Found the Rumination.', consumer, rumination);
+            } else {
+              callback(404, 'Not Found. The rumination could not be found on the server.', null, null);
+            }
+          }, function(error) {
+            callback(400, error.message, consumer, null);
+          });
+        } else {
+          callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+        }
+      }, function() {
+        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+      });
+    }
+  };
 
   /**
    * Create a new Consumer's Rumination
