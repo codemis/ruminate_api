@@ -94,7 +94,7 @@ describe('Ruminations:', function () {
       });
   });
 
-  describe('GET  /consumers/ruminations/{ruminationId}', function () {
+  describe('GET  /consumers/ruminations', function () {
 
     it('should retrieve all the consumer\'s ruminations', function (done) {
       api.get('/consumers/ruminations')
@@ -105,19 +105,67 @@ describe('Ruminations:', function () {
         expect(res.ok).to.be.true;
         expect(res.status).to.equal(200);
         expect(res.body.length).to.equal(2);
-        for (var i = 0; i < res.body.length; i++) {
-          var actualData = res.body[i];
-          var expectedData = ruminationOne;
-          if (actualData.id === ruminationTwo.id) {
-            expectedData = ruminationTwo;
+        expect(res.body[0].hasOwnProperty('passage')).to.be.true;
+        expect(res.body[0].passage.version).to.equal(ruminationOne.passage.version);
+        expect(res.body[0].passage.snippet).to.equal(ruminationOne.passage.snippet);
+        expect(res.body[0].passage.snippet).to.equal(ruminationOne.passage.snippet);
+        expect(res.body[0].passage.first).to.shallowDeepEqual(ruminationOne.passage.first);
+        expect(res.body[0].passage.last).to.shallowDeepEqual(ruminationOne.passage.last);
+
+        expect(res.body[1].hasOwnProperty('passage')).to.be.true;
+        expect(res.body[1].passage.version).to.equal(ruminationTwo.passage.version);
+        expect(res.body[1].passage.snippet).to.equal(ruminationTwo.passage.snippet);
+        expect(res.body[1].passage.snippet).to.equal(ruminationTwo.passage.snippet);
+        expect(res.body[1].passage.first).to.shallowDeepEqual(ruminationTwo.passage.first);
+        expect(res.body[1].passage.last).to.shallowDeepEqual(ruminationTwo.passage.last);
+        done();
+      });
+    });
+
+    it('should sort ruminations by firstBook', function (done) {
+      var data = {
+        "sortOrder": {
+          "ruminations": {
+            "field": "firstBook",
+            "direction": "asc"
           }
-          expect(actualData.hasOwnProperty('passage')).to.be.true;
-          expect(actualData.passage.version).to.equal(expectedData.passage.version);
-          expect(actualData.passage.snippet).to.equal(expectedData.passage.snippet);
-          expect(actualData.passage.snippet).to.equal(expectedData.passage.snippet);
-          expect(actualData.passage.first).to.shallowDeepEqual(expectedData.passage.first);
-          expect(actualData.passage.last).to.shallowDeepEqual(expectedData.passage.last);
         }
+      };
+      api.get('/consumers/ruminations')
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .send(data)
+      .end(function(err, res) {
+        expect(res.ok).to.be.true;
+        expect(res.status).to.equal(200);
+        expect(res.body.length).to.equal(2);
+        expect(res.body[0].id).to.equal(ruminationTwo.id);
+        expect(res.body[1].id).to.equal(ruminationOne.id);
+        done();
+      });
+    });
+
+    it('should require an api key', function (done) {
+      api.get('/consumers/ruminations')
+      .send({})
+      .set('Accept', 'application/json')
+      .end(function(err, res) {
+        expect(res.status).to.equal(404);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
+        done();
+      });
+    });
+
+    it('should require a valid api key', function (done) {
+      api.get('/consumers/ruminations')
+      .send({})
+      .set('Accept', 'application/json')
+      .set('x-api-key', 'IAMTHEONEWHOISINVALID')
+      .end(function(err, res) {
+        expect(res.status).to.equal(404);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/consumer could not be found/g)).to.not.equal(null);
         done();
       });
     });

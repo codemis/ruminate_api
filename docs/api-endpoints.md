@@ -431,6 +431,30 @@ Retrieve a list of all the Consumer's ruminations.
       }
     ]
 
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The ruminations could not be found on the server."
+    }
+
 <!-- include(includes/response_common_errors.md) -->
 
 ## Retrieve [GET /consumers/ruminations/(rumination_id)]

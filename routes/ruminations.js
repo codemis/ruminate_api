@@ -24,7 +24,7 @@ module.exports = function (restify, server, models) {
    * GET: Get all Ruminations for a consumer
    */
   server.get('/consumers/ruminations', function(req, res) {
-    controller.index(req.headers, req.params, function(status, message, consumer, ruminations) {
+    controller.index(req.headers, req.params, JSON.parse(req.body), function(status, message, consumer, ruminations) {
       if (status === 200) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (ruminations) {
@@ -132,27 +132,40 @@ function RuminationsController(models) {
    *
    * @param  {Object}   headers  The headers passed to the API
    * @param  {Object}   params   The parameters passed to the API
+   * @param  {Object}   body     The body data passed to the API
    * @param  {Function} callback The method to callback when completed
    * @return {Void}
    *
    * @access public
    */
-  controller.index = function(headers, params, callback) {
-    models.Consumer.findOne({
-      where: { apiKey: headers['x-api-key'] }
-    }).then(function(consumer) {
-      models.Rumination.findAll({
-        where: {
-          ConsumerId: consumer.id
-        }
-      }).then(function(ruminations) {
-        callback(200, 'Found the ruminations.', consumer, ruminations);
-      }, function(error) {
-        callback(400, error.message, consumer, null);
-      });
-    }, function() {
+  controller.index = function(headers, params, body, callback) {
+    if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
-    });
+    } else {
+      models.Consumer.findOne({
+        where: { apiKey: headers['x-api-key'] }
+      }).then(function(consumer) {
+        var order = models.Rumination.parseSortOrder(body);
+        if (consumer) {
+          models.Rumination.findAll({
+            where: {
+              ConsumerId: consumer.id
+            },
+            order: [
+              order
+            ]
+          }).then(function(ruminations) {
+            callback(200, 'Found the ruminations.', consumer, ruminations);
+          }, function(error) {
+            callback(400, error.message, consumer, null);
+          });
+        } else {
+          callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+        }
+      }, function() {
+        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+      });
+    }
   };
 
   /**
