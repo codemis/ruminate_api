@@ -68,6 +68,47 @@ module.exports = function(sequelize, DataTypes) {
           }
         }
         return request;
+      },
+      /**
+       * Parse the sort order for ruminations
+       *
+       * @param  {Object} data  The request parameters
+       * @return {Array}        The Sequelize sort array
+       * @access public
+       */
+      parseSortOrder: function(data) {
+        var order = ['createdAt', 'ASC'];
+        var allowedFields = [
+          'passageVersion',
+          'passageSnippet',
+          'firstBook',
+          'firstAbbreviation',
+          'firstChapter',
+          'firstVerse',
+          'lastBook',
+          'lastAbbreviation',
+          'lastChapter',
+          'lastVerse',
+          'createdAt',
+          'updatedAt'
+        ];
+        if (
+          (_.has(data, 'sortOrder')) &&
+          (_.has(data.sortOrder, 'ruminations')) &&
+          (_.has(data.sortOrder.ruminations, 'field')) &&
+          (_.has(data.sortOrder.ruminations, 'direction'))
+        ) {
+            var field = data.sortOrder.ruminations.field;
+            var direction = data.sortOrder.ruminations.direction.toUpperCase();
+            if (_.indexOf(allowedFields, field) === -1) {
+              throw new Error('Bad Request. The field you provided is not allowed.');
+            } else if (_.indexOf(['ASC', 'DESC'], direction) === -1) {
+              throw new Error('Bad Request. The direction you provided is not allowed.');
+            } else {
+              order = [field, direction];
+            }
+        }
+        return order;
       }
     },
     instanceMethods: {

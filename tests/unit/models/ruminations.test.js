@@ -60,4 +60,57 @@ describe('Models: Rumination', function () {
 
   });
 
+  describe('parseSortOrder()', function () {
+
+    it('should set the default if no params are passed in', function () {
+      var actual = models.Rumination.parseSortOrder({});
+      expect(actual[0]).to.equal('createdAt');
+      expect(actual[1]).to.equal('ASC');
+    });
+
+    it('should set the given params that are passed in', function () {
+      var data = {
+        "sortOrder": {
+          "ruminations": {
+            "field": "updatedAt",
+            "direction": "desc"
+          }
+        }
+      };
+      var actual = models.Rumination.parseSortOrder(data);
+      expect(actual[0]).to.equal('updatedAt');
+      expect(actual[1]).to.equal('DESC');
+    });
+
+    it('should throw an error if you pass a bad field', function () {
+      var data = {
+        "sortOrder": {
+          "ruminations": {
+            "field": "ConsumerId",
+            "direction": "desc"
+          }
+        }
+      };
+      var fn = function() {
+        models.Rumination.parseSortOrder(data);
+      };
+      expect(fn).to.throw('The field you provided is not allowed.');
+    });
+
+    it('should throw an error if you pass a bad direction', function () {
+      var data = {
+        "sortOrder": {
+          "ruminations": {
+            "field": "updatedAt",
+            "direction": "backwards"
+          }
+        }
+      };
+      var fn = function() {
+        models.Rumination.parseSortOrder(data);
+      };
+      expect(fn).to.throw('The direction you provided is not allowed.');
+    });
+  });
+
 });

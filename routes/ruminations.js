@@ -21,7 +21,30 @@ module.exports = function (restify, server, models) {
   var controller = RuminationsController(models);
 
   /**
-   * GET: Get an individaul rumination
+   * GET: Get all Ruminations for a consumer
+   */
+  server.get('/consumers/ruminations', function(req, res) {
+    controller.index(req.headers, req.params, JSON.parse(req.body), function(status, message, consumer, ruminations) {
+      if (status === 200) {
+        res.header('x-api-key', req.headers['x-api-key']);
+        if (ruminations) {
+          var data = [];
+          for (var i = 0; i < ruminations.length; i++) {
+            data.push(ruminations[i].toResponse());
+          }
+          res.send(status, data);
+        } else {
+          res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
+        }
+      } else {
+        res.header('x-api-key', req.headers['x-api-key']);
+        res.send(status, { 'error': message });
+      }
+    });
+  });
+
+  /**
+   * GET: Get an individual rumination
    */
   server.get('/consumers/ruminations/:ruminationId', function(req, res) {
     controller.show(req.headers, req.params, function(status, message, consumer, rumination) {
@@ -103,6 +126,56 @@ function RuminationsController(models) {
    * @param {Object}
    */
   var controller = new Object();
+
+  /**
+   * Find all Ruminations for a Consumer
+   *
+   * @param  {Object}   headers  The headers passed to the API
+   * @param  {Object}   params   The parameters passed to the API
+   * @param  {Object}   body     The body data passed to the API
+   * @param  {Function} callback The method to callback when completed
+   * @return {Void}
+   *
+   * @access public
+   */
+  controller.index = function(headers, params, body, callback) {
+    var orderError = false;
+    var errorMessage = '';
+    try {
+      var order = models.Rumination.parseSortOrder(body);
+    } catch (error) {
+      orderError = true;
+      errorMessage = error.message;
+    }
+    if (!hasHeader(headers, 'x-api-key')) {
+      callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+    } else if (orderError) {
+      callback(400, errorMessage, null, null);
+    } else {
+      models.Consumer.findOne({
+        where: { apiKey: headers['x-api-key'] }
+      }).then(function(consumer) {
+        if (consumer) {
+          models.Rumination.findAll({
+            where: {
+              ConsumerId: consumer.id
+            },
+            order: [
+              order
+            ]
+          }).then(function(ruminations) {
+            callback(200, 'Found the ruminations.', consumer, ruminations);
+          }, function(error) {
+            callback(400, error.message, consumer, null);
+          });
+        } else {
+          callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+        }
+      }, function() {
+        callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+      });
+    }
+  };
 
   /**
    * Find a Rumination
