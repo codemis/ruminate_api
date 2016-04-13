@@ -30,6 +30,26 @@ module.exports = function(sequelize, DataTypes) {
 
         return request;
       }
+    },
+    instanceMethods: {
+      /**
+       * Return the reponse for a Response
+       *
+       * @return {Object} JSON Object of the Response Data
+       * @access public
+       */
+      toResponse: function() {
+        return {
+          id: this.id,
+          question: {
+            theme: this.questionTheme,
+            content: this.questionContent
+          },
+          answer: this.answer,
+          createdAt:    this.createdAt,
+          updatedAt:    this.updatedAt
+        };
+      }
     }
   });
   return Response;
