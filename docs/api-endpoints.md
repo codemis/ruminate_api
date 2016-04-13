@@ -330,7 +330,7 @@ Retrieve a list of all the Consumer's ruminations.
                     "title": "Field to Sort By",
                     "description": "The field to sort the data by.",
                     "type": "string",
-                    "enum": ["createdAt", "updatedAt"]
+                    "enum": ["passageVersion", "passageSnippet", "firstBook", "firstAbbreviation", "firstChapter", "firstVerse", "lastBook", "lastAbbreviation", "lastChapter", "lastVerse", "createdAt", "updatedAt"]
                   },
                   "direction": {
                     "title": "Sort Direction",
@@ -455,6 +455,29 @@ Retrieve a list of all the Consumer's ruminations.
         "error": "Not Found. The ruminations could not be found on the server."
     }
 
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The field you provided is not allowed."
+    }
+
++ Response 400 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Bad Request. The direction you provided is not allowed."
+    }
 <!-- include(includes/response_common_errors.md) -->
 
 ## Retrieve [GET /consumers/ruminations/(rumination_id)]

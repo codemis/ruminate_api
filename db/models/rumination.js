@@ -101,9 +101,9 @@ module.exports = function(sequelize, DataTypes) {
             var field = data.sortOrder.ruminations.field;
             var direction = data.sortOrder.ruminations.direction.toUpperCase();
             if (_.indexOf(allowedFields, field) === -1) {
-              throw new Error('The field you provided is not allowed.');
+              throw new Error('Bad Request. The field you provided is not allowed.');
             } else if (_.indexOf(['ASC', 'DESC'], direction) === -1) {
-              throw new Error('The direction you provided is not allowed.');
+              throw new Error('Bad Request. The direction you provided is not allowed.');
             } else {
               order = [field, direction];
             }
