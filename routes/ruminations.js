@@ -139,13 +139,22 @@ function RuminationsController(models) {
    * @access public
    */
   controller.index = function(headers, params, body, callback) {
+    var orderError = false;
+    var errorMessage = '';
+    try {
+      var order = models.Rumination.parseSortOrder(body);
+    } catch (error) {
+      orderError = true;
+      errorMessage = error.message;
+    }
     if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+    } else if (orderError) {
+      callback(400, errorMessage, null, null);
     } else {
       models.Consumer.findOne({
         where: { apiKey: headers['x-api-key'] }
       }).then(function(consumer) {
-        var order = models.Rumination.parseSortOrder(body);
         if (consumer) {
           models.Rumination.findAll({
             where: {
