@@ -899,4 +899,41 @@ Update the Consumer's response.
       "updatedAt": "2016-03-14 22:45:25"
     }
 
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The consumer could not be found on the server."
+    }
+
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The rumination could not be found on the server."
+    }
+
++ Response 404 (application/json)
+
+  + Headers
+
+      x-api-key: [The Consumer's API Key]
+
+  + Body
+
+    {
+        "error": "Not Found. The response could not be found on the server."
+    }
+
 <!-- include(includes/response_common_errors.md) -->

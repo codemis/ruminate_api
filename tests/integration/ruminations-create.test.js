@@ -7,6 +7,7 @@ var randomstring = require('randomstring');
 
 describe('Ruminations:', function () {
   var consumer = '';
+  var consumerId = 0;
   var apiKey = '';
 
   beforeEach(function(done) {
@@ -31,6 +32,7 @@ describe('Ruminations:', function () {
         client.createConsumer(data)
         .then(function(result) {
           apiKey = result.apiKey;
+          consumerId = result.id;
           consumer = result.toResponse();
           done();
         }, function(error) {
@@ -75,7 +77,10 @@ describe('Ruminations:', function () {
           expect(res.headers['location']).to.not.equal(null);
           expect(res.body.hasOwnProperty('id')).to.be.true;
           models.Rumination.findOne({
-            passageVersion: version
+            where: {
+              ConsumerId: consumerId,
+              passageVersion: version
+            }
           }).then(function(rumination) {
             expect(rumination).to.not.equal(null);
             expect(rumination.firstBook).to.equal('Proverbs');

@@ -22,6 +22,7 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Rumination.belongsTo(models.Consumer);
+        Rumination.hasMany(models.Response);
       },
       /**
        * Parse the request data to create the Rumination object
@@ -119,6 +120,12 @@ module.exports = function(sequelize, DataTypes) {
        * @access public
        */
       toResponse: function() {
+        var responses = [];
+        if (this.Responses) {
+          for (var i = 0, len = this.Responses.length; i < len; i++) {
+            responses.push(this.Responses[i].toResponse());
+          }
+        }
         return {
           id: this.id,
           passage: {
@@ -137,6 +144,7 @@ module.exports = function(sequelize, DataTypes) {
               verse:          this.lastVerse
             }
           },
+          responses: responses,
           createdAt:    this.createdAt,
           updatedAt:    this.updatedAt
         };
