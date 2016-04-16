@@ -49,6 +49,16 @@ var server = restify.createServer();
  */
 server.use(restify.bodyParser({ mapParams: true }));
 /**
+ * Enable Cors
+ */
+server.use(restify.CORS(
+  {
+    origins: ['*'],
+    credentials: false,
+    headers: ['x-client-id', 'x-api-key', 'location']
+  }
+));
+/**
  * Handle the default errors
  */
 server.on('uncaughtException', function (req, res) {
