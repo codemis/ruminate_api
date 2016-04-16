@@ -47,7 +47,7 @@ module.exports = function (restify, server, models) {
    * GET: Get an individual rumination
    */
   server.get('/consumers/ruminations/:ruminationId', function(req, res) {
-    controller.show(req.headers, req.params, function(status, message, consumer, rumination) {
+    controller.show(req.headers, req.params, JSON.parse(req.body), function(status, message, consumer, rumination) {
       if (status === 200) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
@@ -182,16 +182,27 @@ function RuminationsController(models) {
    *
    * @param  {Object}   headers  The headers passed to the API
    * @param  {Object}   params   The parameters passed to the API
+   * @param  {Object}   body     The body data passed to the API
    * @param  {Function} callback The method to callback when completed
    * @return {Void}
    *
    * @access public
    */
-  controller.show = function(headers, params, callback) {
+  controller.show = function(headers, params, body, callback) {
+    var orderError = false;
+    var errorMessage = '';
+    try {
+      var order = models.Response.parseSortOrder(body);
+    } catch (error) {
+      orderError = true;
+      errorMessage = error.message;
+    }
     if (!params.ruminationId) {
       callback(404, 'Not Found. The rumination could not be found on the server.', null, null);
     } else if (!hasHeader(headers, 'x-api-key')) {
       callback(404, 'Not Found. The consumer could not be found on the server.', null, null);
+    } else if (orderError) {
+      callback(400, errorMessage, null, null);
     } else {
       models.Consumer.findOne({
         where: { apiKey: headers['x-api-key'] }
@@ -203,7 +214,12 @@ function RuminationsController(models) {
               ConsumerId: consumer.id
             },
             include: [
-              { model: models.Response}
+              {
+                model: models.Response
+              }
+            ],
+            order: [
+              order
             ]
           }).then(function(rumination) {
             if (rumination) {

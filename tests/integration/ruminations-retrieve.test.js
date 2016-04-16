@@ -123,6 +123,98 @@ describe('Ruminations:', function () {
       });
     });
 
+    it('should sort responses by questionTheme', function (done) {
+      api.get('/consumers/ruminations/'+ruminationId)
+      .send(
+        {
+          "sortOrder": {
+            "responses": {
+              "field": "questionTheme",
+              "direction": "desc"
+            }
+          }
+        }
+      )
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .end(function(err, res) {
+        expect(res.ok).to.be.true;
+        expect(res.status).to.equal(200);
+        expect(res.body.responses.length).to.equal(2);
+        expect(res.body.responses[0].question.theme).to.equal(responseTwo.question.theme);
+        expect(res.body.responses[1].question.theme).to.equal(responseOne.question.theme);
+        done();
+      });
+    });
+
+    it('should sort responses by answer', function (done) {
+      api.get('/consumers/ruminations/'+ruminationId)
+      .send(
+        {
+          "sortOrder": {
+            "responses": {
+              "field": "answer",
+              "direction": "asc"
+            }
+          }
+        }
+      )
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .end(function(err, res) {
+        expect(res.ok).to.be.true;
+        expect(res.status).to.equal(200);
+        expect(res.body.responses.length).to.equal(2);
+        expect(res.body.responses[0].answer).to.equal(responseTwo.answer);
+        expect(res.body.responses[1].answer).to.equal(responseOne.answer);
+        done();
+      });
+    });
+
+    it('should return an error if you pass an unacceptable sort field', function (done) {
+      api.get('/consumers/ruminations/'+ruminationId)
+      .send(
+        {
+          "sortOrder": {
+            "responses": {
+              "field": "id",
+              "direction": "asc"
+            }
+          }
+        }
+      )
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/field you provided is not allowed/g)).to.not.equal(null);
+        done();
+      });
+    });
+
+    it('should return an error if you pass an unacceptable sort direction', function (done) {
+      api.get('/consumers/ruminations/'+ruminationId)
+      .send(
+        {
+          "sortOrder": {
+            "responses": {
+              "field": "answer",
+              "direction": "upandbeyond"
+            }
+          }
+        }
+      )
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/direction you provided is not allowed/g)).to.not.equal(null);
+        done();
+      });
+    });
+
     it('should require an api key', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
       .send({})
