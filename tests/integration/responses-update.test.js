@@ -73,7 +73,7 @@ describe('Responses:', function () {
             }, function(error) {
               console.log('Unable to create the rumination!');
               done(error);
-            })
+            });
           }, function(error) {
             console.log('Unable to create the rumination!');
             done(error);

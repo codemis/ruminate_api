@@ -201,7 +201,10 @@ function RuminationsController(models) {
             where: {
               id: params.ruminationId,
               ConsumerId: consumer.id
-            }
+            },
+            include: [
+              { model: models.Response}
+            ]
           }).then(function(rumination) {
             if (rumination) {
               callback(200, 'Found the Rumination.', consumer, rumination);
