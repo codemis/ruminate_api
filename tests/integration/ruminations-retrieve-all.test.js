@@ -10,6 +10,9 @@ describe('Ruminations:', function () {
   var apiKey = '';
   var ruminationOne = null;
   var ruminationTwo = null;
+  var responseOne = null;
+  var responseTwo = null;
+  var responseThree = null;
 
   beforeEach(function(done) {
     var clientAppId = randomstring.generate();
@@ -63,6 +66,21 @@ describe('Ruminations:', function () {
         }
       }
     };
+    var responseDataOne = {
+      "questionTheme": "humor",
+      "questionContent": "What is a cow that leans?",
+      "answer": "Lean Beef"
+    };
+    var responseDataTwo = {
+      "questionTheme": "politics",
+      "questionContent": "Who will lose the election?",
+      "answer": "Jimmy the Giant"
+    };
+    var responseDataThree = {
+      "questionTheme": "silly",
+      "questionContent": "Who are you?",
+      "answer": "I don't know"
+    };
     models.Client.create({name: 'Cow BBQ Inc.', applicationId: clientAppId})
       .then(function(client) {
         var data = models.Consumer.parseRequest(params);
@@ -75,12 +93,33 @@ describe('Ruminations:', function () {
           consumerData.createRumination(data)
           .then(function(ruminationData) {
             ruminationOne = ruminationData.toResponse();
-            consumerData.createRumination(dataTwo)
-            .then(function(ruminationData) {
-              ruminationTwo = ruminationData.toResponse();
-              done();
+            ruminationData.createResponse(responseDataOne)
+            .then(function(response) {
+              responseOne = response.toResponse();
+              ruminationData.createResponse(responseDataTwo)
+              .then(function(response) {
+                responseTwo = response.toResponse();
+                consumerData.createRumination(dataTwo)
+                .then(function(ruminationData) {
+                  ruminationTwo = ruminationData.toResponse();
+                  ruminationData.createResponse(responseDataThree)
+                  .then(function(response) {
+                    responseThree = response.toResponse();
+                    done();
+                  }, function(error) {
+                    console.log('Unable to create the response 3!');
+                    done(error);
+                  });
+                }, function(error) {
+                  console.log('Unable to create the rumination 2!');
+                  done(error);
+                });
+              }, function(error) {
+                console.log('Unable to create the response 2!');
+                done(error);
+              });
             }, function(error) {
-              console.log('Unable to create the rumination 2!');
+              console.log('Unable to create the response 1!');
               done(error);
             });
           }, function(error) {
@@ -111,6 +150,11 @@ describe('Ruminations:', function () {
         expect(res.body[0].passage.snippet).to.equal(ruminationOne.passage.snippet);
         expect(res.body[0].passage.first).to.shallowDeepEqual(ruminationOne.passage.first);
         expect(res.body[0].passage.last).to.shallowDeepEqual(ruminationOne.passage.last);
+        expect(res.body[0].responses.length).to.equal(2);
+        expect(res.body[0].responses[0].answer).to.equal(responseOne.answer);
+        expect(res.body[0].responses[0].question).to.shallowDeepEqual(responseOne.question);
+        expect(res.body[0].responses[1].answer).to.equal(responseTwo.answer);
+        expect(res.body[0].responses[1].question).to.shallowDeepEqual(responseTwo.question);
 
         expect(res.body[1].hasOwnProperty('passage')).to.be.true;
         expect(res.body[1].passage.version).to.equal(ruminationTwo.passage.version);
@@ -118,6 +162,9 @@ describe('Ruminations:', function () {
         expect(res.body[1].passage.snippet).to.equal(ruminationTwo.passage.snippet);
         expect(res.body[1].passage.first).to.shallowDeepEqual(ruminationTwo.passage.first);
         expect(res.body[1].passage.last).to.shallowDeepEqual(ruminationTwo.passage.last);
+        expect(res.body[1].responses.length).to.equal(1);
+        expect(res.body[1].responses[0].answer).to.equal(responseThree.answer);
+        expect(res.body[1].responses[0].question).to.shallowDeepEqual(responseThree.question);
         done();
       });
     });
@@ -164,6 +211,29 @@ describe('Ruminations:', function () {
         expect(res.body.length).to.equal(2);
         expect(res.body[1].id).to.equal(ruminationTwo.id);
         expect(res.body[0].id).to.equal(ruminationOne.id);
+        done();
+      });
+    });
+
+    it('should sort responses by questionTheme', function (done) {
+      var data = {
+        "sortOrder": {
+          "responses": {
+            "field": "questionTheme",
+            "direction": "desc"
+          }
+        }
+      };
+      api.get('/consumers/ruminations')
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .send(data)
+      .end(function(err, res) {
+        expect(res.ok).to.be.true;
+        expect(res.status).to.equal(200);
+        expect(res.body[0].responses.length).to.equal(2);
+        expect(res.body[0].responses[0].question.theme).to.equal(responseTwo.question.theme);
+        expect(res.body[0].responses[1].question.theme).to.equal(responseOne.question.theme);
         done();
       });
     });
@@ -215,11 +285,53 @@ describe('Ruminations:', function () {
       });
     });
 
+    it('should return an error if you pass an unacceptable response field', function (done) {
+      var data = {
+        "sortOrder": {
+          "responses": {
+            "field": "id",
+            "direction": "desc"
+          }
+        }
+      };
+      api.get('/consumers/ruminations')
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .send(data)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/field you provided is not allowed/g)).to.not.equal(null);
+        done();
+      });
+    });
+
     it('should return an error if you pass an unacceptable sort order', function (done) {
       var data = {
         "sortOrder": {
           "ruminations": {
             "field": "firstChapter",
+            "direction": "skip"
+          }
+        }
+      };
+      api.get('/consumers/ruminations')
+      .set('Accept', 'application/json')
+      .set('x-api-key', apiKey)
+      .send(data)
+      .end(function(err, res) {
+        expect(res.status).to.equal(400);
+        expect(res.body.hasOwnProperty('error')).to.be.true;
+        expect(res.body.error.match(/direction you provided is not allowed/g)).to.not.equal(null);
+        done();
+      });
+    });
+
+    it('should return an error if you pass an unacceptable response sort order', function (done) {
+      var data = {
+        "sortOrder": {
+          "responses": {
+            "field": "createdAt",
             "direction": "skip"
           }
         }

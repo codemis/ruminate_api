@@ -143,6 +143,7 @@ function RuminationsController(models) {
     var errorMessage = '';
     try {
       var order = models.Rumination.parseSortOrder(body);
+      var responseOrder = models.Response.parseSortOrder(body);
     } catch (error) {
       orderError = true;
       errorMessage = error.message;
@@ -160,8 +161,14 @@ function RuminationsController(models) {
             where: {
               ConsumerId: consumer.id
             },
+            include: [
+              {
+                model: models.Response
+              }
+            ],
             order: [
-              order
+              order,
+              responseOrder
             ]
           }).then(function(ruminations) {
             callback(200, 'Found the ruminations.', consumer, ruminations);
