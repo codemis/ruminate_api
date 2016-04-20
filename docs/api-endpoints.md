@@ -1,5 +1,5 @@
 FORMAT: 1A
-HOST: https://api-ruminate.codingstudio.org
+HOST: http://ruminate.codingstudio.org
 
 # Ruminate API (Version 1)
 
