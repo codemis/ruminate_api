@@ -93,14 +93,11 @@ module.exports = function(sequelize, DataTypes) {
           'createdAt',
           'updatedAt'
         ];
-        if (
-          (_.has(data, 'sortOrder')) &&
-          (_.has(data.sortOrder, 'ruminations')) &&
-          (_.has(data.sortOrder.ruminations, 'field')) &&
-          (_.has(data.sortOrder.ruminations, 'direction'))
-        ) {
-            var field = data.sortOrder.ruminations.field;
-            var direction = data.sortOrder.ruminations.direction.toUpperCase();
+        if (_.has(data, 'sort_ruminations')) {
+          var sortData = data.sort_ruminations.split('|');
+          if (sortData.length >= 2) {
+            var field = sortData[0];
+            var direction = sortData[1].toUpperCase();
             if (_.indexOf(allowedFields, field) === -1) {
               throw new Error('Bad Request. The field you provided is not allowed.');
             } else if (_.indexOf(['ASC', 'DESC'], direction) === -1) {
@@ -108,6 +105,7 @@ module.exports = function(sequelize, DataTypes) {
             } else {
               order = [field, direction];
             }
+          }
         }
         return order;
       }

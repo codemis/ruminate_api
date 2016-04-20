@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
        * @access public
        */
       parseSortOrder: function(data) {
-        var order = ['createdAt', 'ASC'];
+        var order = [Response, 'createdAt', 'ASC'];
         var allowedFields = [
           'questionTheme',
           'questionContent',
@@ -46,14 +46,11 @@ module.exports = function(sequelize, DataTypes) {
           'createdAt',
           'updatedAt'
         ];
-        if (
-          (_.has(data, 'sortOrder')) &&
-          (_.has(data.sortOrder, 'responses')) &&
-          (_.has(data.sortOrder.responses, 'field')) &&
-          (_.has(data.sortOrder.responses, 'direction'))
-        ) {
-            var field = data.sortOrder.responses.field;
-            var direction = data.sortOrder.responses.direction.toUpperCase();
+        if (_.has(data, 'sort_responses')) {
+          var sortData = data.sort_responses.split('|');
+          if (sortData.length >= 2) {
+            var field = sortData[0];
+            var direction = sortData[1].toUpperCase();
             if (_.indexOf(allowedFields, field) === -1) {
               throw new Error('Bad Request. The field you provided is not allowed.');
             } else if (_.indexOf(['ASC', 'DESC'], direction) === -1) {
@@ -61,6 +58,7 @@ module.exports = function(sequelize, DataTypes) {
             } else {
               order = [Response, field, direction];
             }
+          }
         }
         return order;
       }

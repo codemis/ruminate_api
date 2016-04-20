@@ -99,7 +99,6 @@ describe('Ruminations:', function () {
 
     it('should retrieve the rumination', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
       .end(function(err, res) {
@@ -125,17 +124,8 @@ describe('Ruminations:', function () {
 
     it('should sort responses by questionTheme', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send(
-        {
-          "sortOrder": {
-            "responses": {
-              "field": "questionTheme",
-              "direction": "desc"
-            }
-          }
-        }
-      )
       .set('Accept', 'application/json')
+      .query({sort_responses: 'questionTheme|desc'})
       .set('x-api-key', apiKey)
       .end(function(err, res) {
         expect(res.ok).to.be.true;
@@ -149,17 +139,8 @@ describe('Ruminations:', function () {
 
     it('should sort responses by answer', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send(
-        {
-          "sortOrder": {
-            "responses": {
-              "field": "answer",
-              "direction": "asc"
-            }
-          }
-        }
-      )
       .set('Accept', 'application/json')
+      .query({sort_responses: 'answer|asc'})
       .set('x-api-key', apiKey)
       .end(function(err, res) {
         expect(res.ok).to.be.true;
@@ -173,18 +154,9 @@ describe('Ruminations:', function () {
 
     it('should return an error if you pass an unacceptable sort field', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send(
-        {
-          "sortOrder": {
-            "responses": {
-              "field": "id",
-              "direction": "asc"
-            }
-          }
-        }
-      )
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
+      .query({sort_responses: 'id|asc'})
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;
@@ -195,17 +167,8 @@ describe('Ruminations:', function () {
 
     it('should return an error if you pass an unacceptable sort direction', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send(
-        {
-          "sortOrder": {
-            "responses": {
-              "field": "answer",
-              "direction": "upandbeyond"
-            }
-          }
-        }
-      )
       .set('Accept', 'application/json')
+      .query({sort_responses: 'answer|upAndBeyond'})
       .set('x-api-key', apiKey)
       .end(function(err, res) {
         expect(res.status).to.equal(400);
@@ -217,7 +180,6 @@ describe('Ruminations:', function () {
 
     it('should require an api key', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send({})
       .set('Accept', 'application/json')
       .end(function(err, res) {
         expect(res.status).to.equal(404);
@@ -229,7 +191,6 @@ describe('Ruminations:', function () {
 
     it('should require a valid api key', function (done) {
       api.get('/consumers/ruminations/'+ruminationId)
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', 'DRHASNOKEY!')
       .end(function(err, res) {
@@ -242,7 +203,6 @@ describe('Ruminations:', function () {
 
     it('should require a ruminationId in the URL', function (done) {
       api.get('/consumers/ruminations/')
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
       .end(function(err, res) {
@@ -255,7 +215,6 @@ describe('Ruminations:', function () {
 
     it('should require a valid ruminationId in the URL', function (done) {
       api.get('/consumers/ruminations/999998998')
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
       .end(function(err, res) {
