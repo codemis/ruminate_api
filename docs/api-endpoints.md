@@ -282,9 +282,18 @@ Update the information for the consumer that belongs to the given API key.
 
 A consumer's rumination on a passage of Scripture.
 
-## Retrieve All [GET /consumers/ruminations]
+## Retrieve All [GET /consumers/ruminations{?sort_ruminations,sort_responses}]
 
 Retrieve a list of all the Consumer's ruminations.
+
++ Parameters
+    + sort_ruminations: `firstBook|desc` (string, optional) - A pipe separated string with the field to sort by, and the direction to sort in for the rumination respults.  You can sort by passageVersion, passageSnippet, firstBook, firstAbbreviation, firstChapter, firstVerse, lastBook, lastAbbreviation, lastChapter, lastVerse, createdAt, updatedAt.
+
+      + Default: `createdAt|asc`
+
+    + sort_responses: `answer|desc` (string, optional) - A pipe separated string with the field to sort by, and the direction to sort in for the responses result.  You can sort by questionTheme, questionContent, answer, createdAt, and updatedAt.
+
+        + Default: `createdAt|asc`
 
 + Request Retrieve All Ruminations (application/json)
 
@@ -296,72 +305,6 @@ Retrieve a list of all the Consumer's ruminations.
   + Body
 
       {
-        "sortOrder": {
-          "ruminations": {
-            "field": "createdAt",
-            "direction": "desc"
-          },
-          "responses": {
-            "field": "createdAt",
-            "direction": "desc"
-          }
-        }
-      }
-
-  + Schema
-
-      {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "title": "The Rumination Options Object",
-        "description": "An options object for setting sort order on the returned results.",
-        "type": "object",
-        "properties": {
-          "sortOrder": {
-            "title": "Sort Options",
-            "description": "Options for sorting the needed data.",
-            "type": "object",
-            "properties": {
-              "ruminations": {
-                "title": "Sort Options for Ruminations",
-                "description": "Define how you want the ruminations to be sorted.",
-                "type": "object",
-                "properties": {
-                  "field": {
-                    "title": "Field to Sort By",
-                    "description": "The field to sort the data by.",
-                    "type": "string",
-                    "enum": ["passageVersion", "passageSnippet", "firstBook", "firstAbbreviation", "firstChapter", "firstVerse", "lastBook", "lastAbbreviation", "lastChapter", "lastVerse", "createdAt", "updatedAt"]
-                  },
-                  "direction": {
-                    "title": "Sort Direction",
-                    "description": "The direction to sort the data in.",
-                    "type": "string",
-                    "enum": ["asc", "desc"]
-                  }
-                }
-              },
-              "responses": {
-                "title": "Sort Options for Responses",
-                "description": "Define how you want the responses to be sorted.",
-                "type": "object",
-                "properties": {
-                  "field": {
-                    "title": "Field to Sort By",
-                    "description": "The field to sort the data by.",
-                    "type": "string",
-                    "enum": ["createdAt", "updatedAt"]
-                  },
-                  "direction": {
-                    "title": "Sort Direction",
-                    "description": "The direction to sort the data in.",
-                    "type": "string",
-                    "enum": ["asc", "desc"]
-                  }
-                }
-              }
-            }
-          }
-        }
       }
 
 + Response 200 (application/json)
@@ -480,12 +423,16 @@ Retrieve a list of all the Consumer's ruminations.
     }
 <!-- include(includes/response_common_errors.md) -->
 
-## Retrieve [GET /consumers/ruminations/(rumination_id)]
+## Retrieve [GET /consumers/ruminations/{rumination_id}{?sort_responses}]
 
 Retrieve a specific Consumer's rumination.
 
 + Parameters
-    + rumination_id (number) - ID of the specific rumination to retrieve.
+    + rumination_id: `1` (number, required) - ID of the specific rumination to retrieve.
+
+    + sort_responses: `answer|desc` (string, optional) - A pipe separated string with the field to sort by, and the direction to sort in for the responses result.  You can sort by questionTheme, questionContent, answer, createdAt, and updatedAt.
+
+        + Default: `createdAt|asc`
 
 + Request Retrieve A Rumination (application/json)
 
@@ -496,50 +443,7 @@ Retrieve a specific Consumer's rumination.
   + Body
 
   {
-    "sortOrder": {
-      "responses": {
-        "field": "createdAt",
-        "direction": "desc"
-      }
-    }
   }
-
-  + Schema
-
-      {
-        "$schema": "http://json-schema.org/draft-04/schema#",
-        "title": "The Rumination Options Object",
-        "description": "An options object for setting sort order on the returned results.",
-        "type": "object",
-        "properties": {
-          "sortOrder": {
-            "title": "Sort Options",
-            "description": "Options for sorting the needed data.",
-            "type": "object",
-            "properties": {
-              "responses": {
-                "title": "Sort Options for Responses",
-                "description": "Define how you want the responses to be sorted.",
-                "type": "object",
-                "properties": {
-                  "field": {
-                    "title": "Field to Sort By",
-                    "description": "The field to sort the data by.",
-                    "type": "string",
-                    "enum": ["createdAt", "updatedAt"]
-                  },
-                  "direction": {
-                    "title": "Sort Direction",
-                    "description": "The direction to sort the data in.",
-                    "type": "string",
-                    "enum": ["asc", "desc"]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
 
 + Response 200 (application/json)
 
@@ -692,12 +596,12 @@ Create a new rumination for the Consumer.
 
 <!-- include(includes/response_common_errors.md) -->
 
-## Update [PUT /consumers/ruminations/(rumination_id)]
+## Update [PUT /consumers/ruminations/{rumination_id}]
 
 Update the specific Consumer's rumination.
 
 + Parameters
-    + rumination_id (number) - ID of the specific rumination to update.
+    + rumination_id: `1` (number, required) - ID of the specific rumination to update.
 
 + Request Retrieve A Rumination (application/json)
 
@@ -788,12 +692,12 @@ Update the specific Consumer's rumination.
 
 <!-- include(includes/response_common_errors.md) -->
 
-## Delete [DELETE /consumers/ruminations/(rumination_id)]
+## Delete [DELETE /consumers/ruminations/{rumination_id}]
 
 Delete the specific Consumer's rumination.
 
 + Parameters
-    + rumination_id (number) - ID of the specific rumination to delete.
+    + rumination_id: `1` (number, required) - ID of the specific rumination to delete.
 
 + Request Delete A Rumination (application/json)
 
@@ -841,13 +745,13 @@ Delete the specific Consumer's rumination.
 
 Each rumination has one or more responses to a series of questions asked through out the day.  A Cron job adds a question, and a blank response to a rumination at the Consumer's set push interval, and then pushes a notification to respond.  Since the creation of the responses is made by the Cron job, you only have access to update the response.
 
-## Update [PUT /consumers/ruminations/(rumination_id)/responses/(response_id)]
+## Update [PUT /consumers/ruminations/{rumination_id}/responses/{response_id}]
 
 Update the Consumer's response.
 
 + Parameters
-    + rumination_id (number) - ID of the specific rumination the response belongs to.
-    + response_id (number) - ID of the specific response to update.
+    + rumination_id: `1` (number, required) - ID of the specific rumination the response belongs to.
+    + response_id: `1` (number, required) - ID of the specific response to update.
 
 + Request Update a Response (application/json)
 

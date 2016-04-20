@@ -137,7 +137,6 @@ describe('Ruminations:', function () {
 
     it('should retrieve all the consumer\'s ruminations', function (done) {
       api.get('/consumers/ruminations')
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
       .end(function(err, res) {
@@ -170,18 +169,10 @@ describe('Ruminations:', function () {
     });
 
     it('should sort ruminations by firstBook', function (done) {
-      var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "firstBook",
-            "direction": "asc"
-          }
-        }
-      };
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_ruminations: 'firstBook|asc'})
       .end(function(err, res) {
         expect(res.ok).to.be.true;
         expect(res.status).to.equal(200);
@@ -193,18 +184,10 @@ describe('Ruminations:', function () {
     });
 
     it('should sort ruminations by firstVerse', function (done) {
-      var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "firstVerse",
-            "direction": "desc"
-          }
-        }
-      };
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_ruminations: 'firstVerse|desc'})
       .end(function(err, res) {
         expect(res.ok).to.be.true;
         expect(res.status).to.equal(200);
@@ -216,18 +199,10 @@ describe('Ruminations:', function () {
     });
 
     it('should sort responses by questionTheme', function (done) {
-      var data = {
-        "sortOrder": {
-          "responses": {
-            "field": "questionTheme",
-            "direction": "desc"
-          }
-        }
-      };
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_responses: 'questionTheme|desc'})
       .end(function(err, res) {
         expect(res.ok).to.be.true;
         expect(res.status).to.equal(200);
@@ -241,7 +216,6 @@ describe('Ruminations:', function () {
 
     it('should require an api key', function (done) {
       api.get('/consumers/ruminations')
-      .send({})
       .set('Accept', 'application/json')
       .end(function(err, res) {
         expect(res.status).to.equal(404);
@@ -253,7 +227,6 @@ describe('Ruminations:', function () {
 
     it('should require a valid api key', function (done) {
       api.get('/consumers/ruminations')
-      .send({})
       .set('Accept', 'application/json')
       .set('x-api-key', 'IAMTHEONEWHOISINVALID')
       .end(function(err, res) {
@@ -265,18 +238,10 @@ describe('Ruminations:', function () {
     });
 
     it('should return an error if you pass an unacceptable field', function (done) {
-      var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "firstNotebook",
-            "direction": "desc"
-          }
-        }
-      };
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_ruminations: 'firstNotebook|desc'})
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;
@@ -286,18 +251,10 @@ describe('Ruminations:', function () {
     });
 
     it('should return an error if you pass an unacceptable response field', function (done) {
-      var data = {
-        "sortOrder": {
-          "responses": {
-            "field": "id",
-            "direction": "desc"
-          }
-        }
-      };
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_responses: 'id|desc'})
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;
@@ -306,19 +263,11 @@ describe('Ruminations:', function () {
       });
     });
 
-    it('should return an error if you pass an unacceptable sort order', function (done) {
-      var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "firstChapter",
-            "direction": "skip"
-          }
-        }
-      };
+    it('should return an error if you pass an unacceptable ruminations sort order', function (done) {
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_ruminations: 'firstChapter|skip'})
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;
@@ -327,19 +276,11 @@ describe('Ruminations:', function () {
       });
     });
 
-    it('should return an error if you pass an unacceptable response sort order', function (done) {
-      var data = {
-        "sortOrder": {
-          "responses": {
-            "field": "createdAt",
-            "direction": "skip"
-          }
-        }
-      };
+    it('should return an error if you pass an unacceptable responses sort order', function (done) {
       api.get('/consumers/ruminations')
       .set('Accept', 'application/json')
       .set('x-api-key', apiKey)
-      .send(data)
+      .query({sort_responses: 'createdAt|skip'})
       .end(function(err, res) {
         expect(res.status).to.equal(400);
         expect(res.body.hasOwnProperty('error')).to.be.true;

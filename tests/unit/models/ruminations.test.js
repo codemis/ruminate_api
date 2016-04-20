@@ -70,12 +70,7 @@ describe('Models: Rumination', function () {
 
     it('should set the given params that are passed in', function () {
       var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "updatedAt",
-            "direction": "desc"
-          }
-        }
+        sort_ruminations: "updatedAt|desc"
       };
       var actual = models.Rumination.parseSortOrder(data);
       expect(actual[0]).to.equal('updatedAt');
@@ -84,12 +79,7 @@ describe('Models: Rumination', function () {
 
     it('should throw an error if you pass a bad field', function () {
       var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "ConsumerId",
-            "direction": "desc"
-          }
-        }
+        sort_ruminations: "ConsumerId|desc"
       };
       var fn = function() {
         models.Rumination.parseSortOrder(data);
@@ -99,12 +89,7 @@ describe('Models: Rumination', function () {
 
     it('should throw an error if you pass a bad direction', function () {
       var data = {
-        "sortOrder": {
-          "ruminations": {
-            "field": "updatedAt",
-            "direction": "backwards"
-          }
-        }
+        sort_ruminations: "updatedAt|backwards"
       };
       var fn = function() {
         models.Rumination.parseSortOrder(data);

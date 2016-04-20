@@ -49,6 +49,10 @@ var server = restify.createServer();
  */
 server.use(restify.bodyParser({ mapParams: true }));
 /**
+ * Parse query params
+ */
+server.use(restify.queryParser());
+/**
  * Enable Cors
  */
 server.use(restify.CORS(

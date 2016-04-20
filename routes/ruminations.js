@@ -24,7 +24,7 @@ module.exports = function (restify, server, models) {
    * GET: Get all Ruminations for a consumer
    */
   server.get('/consumers/ruminations', function(req, res) {
-    controller.index(req.headers, req.params, JSON.parse(req.body), function(status, message, consumer, ruminations) {
+    controller.index(req.headers, req.params, function(status, message, consumer, ruminations) {
       if (status === 200) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (ruminations) {
@@ -47,7 +47,7 @@ module.exports = function (restify, server, models) {
    * GET: Get an individual rumination
    */
   server.get('/consumers/ruminations/:ruminationId', function(req, res) {
-    controller.show(req.headers, req.params, JSON.parse(req.body), function(status, message, consumer, rumination) {
+    controller.show(req.headers, req.params, function(status, message, consumer, rumination) {
       if (status === 200) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
@@ -132,18 +132,17 @@ function RuminationsController(models) {
    *
    * @param  {Object}   headers  The headers passed to the API
    * @param  {Object}   params   The parameters passed to the API
-   * @param  {Object}   body     The body data passed to the API
    * @param  {Function} callback The method to callback when completed
    * @return {Void}
    *
    * @access public
    */
-  controller.index = function(headers, params, body, callback) {
+  controller.index = function(headers, params, callback) {
     var orderError = false;
     var errorMessage = '';
     try {
-      var order = models.Rumination.parseSortOrder(body);
-      var responseOrder = models.Response.parseSortOrder(body);
+      var order = models.Rumination.parseSortOrder(params);
+      var responseOrder = models.Response.parseSortOrder(params);
     } catch (error) {
       orderError = true;
       errorMessage = error.message;
@@ -189,17 +188,16 @@ function RuminationsController(models) {
    *
    * @param  {Object}   headers  The headers passed to the API
    * @param  {Object}   params   The parameters passed to the API
-   * @param  {Object}   body     The body data passed to the API
    * @param  {Function} callback The method to callback when completed
    * @return {Void}
    *
    * @access public
    */
-  controller.show = function(headers, params, body, callback) {
+  controller.show = function(headers, params, callback) {
     var orderError = false;
     var errorMessage = '';
     try {
-      var order = models.Response.parseSortOrder(body);
+      var order = models.Response.parseSortOrder(params);
     } catch (error) {
       orderError = true;
       errorMessage = error.message;
