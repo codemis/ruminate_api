@@ -64,9 +64,22 @@ server.use(restify.CORS(
 ));
 /**
  * Handle the default errors
+ * http://stackoverflow.com/a/26252941
  */
 server.on('uncaughtException', function (req, res) {
   res.send(500, {"code":"InternalServerError", "message":"The server encountered an unexpected condition."});
+});
+
+/**
+ * Handle option requests
+ *
+ */
+server.opts(/.*/, function (req,res,next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", req.header("Access-Control-Request-Method"));
+    res.header("Access-Control-Allow-Headers", req.header("Access-Control-Request-Headers"));
+    res.send(200);
+    return next();
 });
 
 routes(fs, restify, server, models);
