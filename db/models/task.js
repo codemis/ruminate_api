@@ -5,7 +5,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     classMethods: {
       associate: function(models) {
-        Task.belongsTo(models.Task);
+        Task.belongsTo(models.Rumination);
       }
     }
   });
