@@ -133,15 +133,16 @@ describe('Models: Consumer', function () {
         }
       };
       var expected = [
-        moment('Thu Jun 09 2016 03:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss'),
-        moment('Thu Jun 09 2016 04:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss'),
-        moment('Thu Jun 09 2016 05:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss'),
-        moment('Thu Jun 09 2016 06:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss')
+        moment('Thu Jun 09 2016 16:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/Los_Angeles').format(),
+        moment('Thu Jun 09 2016 17:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/Los_Angeles').format(),
+        moment('Thu Jun 09 2016 18:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/Los_Angeles').format(),
+        moment('Thu Jun 09 2016 19:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/Los_Angeles').format(),
+        moment('Thu Jun 09 2016 20:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/Los_Angeles').format()
       ];
       var data = models.Consumer.parseRequest(params);
       models.Consumer.create(data)
       .then(function(result) {
-        var actual = result.pushDeliveryTimes(moment('Thu Jun 09 2016 03:04:09', 'ddd MMM DD YYYY HH:mm:ss'), 4);
+        var actual = result.pushDeliveryTimes(moment('Thu Jun 09 2016 15:04:09', 'ddd MMM DD YYYY HH:mm:ss'), 7);
         expect(actual).to.deep.equal(expected);
         moment.tz.setDefault();
         done();
@@ -160,14 +161,13 @@ describe('Models: Consumer', function () {
         "push": {
           "interval": 7200,
           "receive": true,
-          "timezone": "America/Los_Angeles",
+          "timezone": "America/New_York",
           "token": "1821a91c-ee54-4bf9-8125-f0e1d0455ef7"
         }
       };
       var expected = [
-        moment('Mon Jun 06 2016 16:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss'),
-        moment('Mon Jun 06 2016 18:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss'),
-        moment('Mon Jun 06 2016 20:04:09', 'ddd MMM DD YYYY HH:mm:ss').utc().format('ddd MMM DD YYYY HH:mm:ss')
+        moment('Mon Jun 06 2016 18:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/New_York').format(),
+        moment('Mon Jun 06 2016 20:04:09', 'ddd MMM DD YYYY HH:mm:ss').tz('America/New_York').format()
       ];
       var data = models.Consumer.parseRequest(params);
       models.Consumer.create(data)

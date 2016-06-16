@@ -150,16 +150,16 @@ module.exports = function(sequelize, DataTypes) {
        */
       pushDeliveryTimes: function(startTimestamp, max) {
         var timestamps = [];
-        var threshold = startTimestamp.clone().hour(21).minute(0).second(0).tz(this.pushTimezone);
+        var threshold = startTimestamp.clone().tz(this.pushTimezone).hour(21).minute(0).second(0);
         var deliveryTime = startTimestamp;
         for (var i = 1; i <= max; i++) {
+          deliveryTime.add(this.pushInterval, 'seconds');
           if (deliveryTime.clone().tz(this.pushTimezone).isBefore(threshold)) {
             /**
              * Convert to UTC
              */
-            timestamps.push(deliveryTime.utc().format('ddd MMM DD YYYY HH:mm:ss'));
+            timestamps.push(deliveryTime.clone().tz(this.pushTimezone).format());
           }
-          deliveryTime.add(this.pushInterval, 'seconds');
         }
         return timestamps;
       }
