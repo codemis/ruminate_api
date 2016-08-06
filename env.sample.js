@@ -3,15 +3,46 @@
  */
 module.exports = function() {
   var settings;
+  var path = require('path');
   switch(process.env.NODE_ENV){
   case 'testing':
-    settings = { port: 8080 };
+    settings = {
+      android: {
+        apiKey: ''
+      },
+      apple: {
+        productionGateway: false,
+        certificate: '',
+        passphrase: ''
+      },
+      port: 8080
+    };
     break;
   case 'production':
-    settings = { port: 8080 };
+    settings = {
+      android: {
+        apiKey: ''
+      },
+      apple: {
+        productionGateway: true,
+        certificate: '',
+        passphrase: ''
+      },
+      port: 8080
+    };
     break;
   default:
-    settings = { port: 8080 };
+    settings = {
+      android: {
+        apiKey: ''
+      },
+      apple: {
+        productionGateway: false,
+        certificate: '',
+        passphrase: ''
+      },
+      port: 8080
+    };
     break;
   }
   return settings;

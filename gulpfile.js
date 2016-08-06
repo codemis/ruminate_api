@@ -63,7 +63,7 @@ var shell = require('gulp-shell');
  *
  * @type {Array}
  */
-var lintFiles = ['./config.js', './index.js', './routes/**/*.js'];
+var lintFiles = ['./config.js', './index.js', './routes/**/*.js', './tasks/**/*.js'];
 /**
  * An array of file locations for the test files to be run
  *
