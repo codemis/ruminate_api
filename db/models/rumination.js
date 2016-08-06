@@ -23,6 +23,7 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Rumination.belongsTo(models.Consumer);
         Rumination.hasMany(models.Response);
+        Rumination.hasMany(models.Task);
       },
       /**
        * Parse the request data to create the Rumination object

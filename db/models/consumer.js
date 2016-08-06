@@ -11,6 +11,11 @@ var hat = require('hat');
  * @param  {Object}
  */
 var _ = require('underscore');
+/**
+ * Include the moment library
+ * @param  {Object}
+ */
+var moment = require('moment');
 
 module.exports = function(sequelize, DataTypes) {
   var Consumer = sequelize.define('Consumer',
@@ -131,6 +136,32 @@ module.exports = function(sequelize, DataTypes) {
           createdAt:    this.createdAt,
           updatedAt:    this.updatedAt
         };
+      },
+      /**
+       * Generates all the times to push notificationsbased on the consumers information.  It takes a start time,
+       * adds it to an array of delivery times, and continues to add modified times that increment based on the
+       * Consumers pushInterval.  Using the Consumer's pushTimezone,  It makes sure not to add any time after 9 PM,
+       * so we do not wake them.
+       *
+       * @param  {Moment}   startTimestamp The starting Timestamp as a Moment object
+       * @param  {Integer}  max            The maximum number of results
+       * @return {Array}                    An array of times in UTC and formatted as 'ddd MMM DD YYYY HH:mm:ss'
+       * @access public
+       */
+      pushDeliveryTimes: function(startTimestamp, max) {
+        var timestamps = [];
+        var threshold = startTimestamp.clone().tz(this.pushTimezone).hour(21).minute(0).second(0);
+        var deliveryTime = startTimestamp;
+        for (var i = 1; i <= max; i++) {
+          deliveryTime.add(this.pushInterval, 'seconds');
+          if (deliveryTime.clone().tz(this.pushTimezone).isBefore(threshold)) {
+            /**
+             * Convert to UTC
+             */
+            timestamps.push(deliveryTime.clone().tz(this.pushTimezone).format());
+          }
+        }
+        return timestamps;
       }
     }
   });

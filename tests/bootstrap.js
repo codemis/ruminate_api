@@ -16,3 +16,4 @@ global.models = require('../db/models/index');
 var config = new Config();
 var supertest = require('supertest');
 global.api = supertest('http://localhost:'+config.port);
+global.moment = require('moment');

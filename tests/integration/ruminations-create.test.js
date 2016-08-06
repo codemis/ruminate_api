@@ -20,7 +20,7 @@ describe('Ruminations:', function () {
         "version": "9.3.1"
       },
       "push": {
-        "interval": 20000,
+        "interval": 5000,
         "receive": true,
         "timezone": "America/Los_Angeles",
         "token": "5e1c5e82-fae4-4620-82d3-5e6344198c28"
@@ -33,7 +33,7 @@ describe('Ruminations:', function () {
         .then(function(result) {
           apiKey = result.apiKey;
           consumerId = result.id;
-          consumer = result.toResponse();
+          consumer = result;
           done();
         }, function(error) {
           console.log('Unable to create the consumer!');
@@ -89,7 +89,37 @@ describe('Ruminations:', function () {
             expect(rumination.lastBook).to.equal('Proverbs');
             expect(rumination.lastChapter).to.equal(29);
             expect(rumination.lastVerse).to.equal(3);
-            expect(rumination.consumerId).to.equal(consumer.id);
+            expect(rumination.ConsumerId).to.equal(consumerId);
+            done();
+          });
+        });
+    });
+
+    it('should create tasks for the push notification', function (done) {
+      var version = randomstring.generate();
+      data['passage']['version'] = version;
+      var deliveryTimes = consumer.pushDeliveryTimes(moment(), 3);
+      api.post('/consumers/ruminations')
+        .send(data)
+        .set('Accept', 'application/json')
+        .set('x-api-key', apiKey)
+        .end(function(err, res) {
+          expect(res.ok).to.be.true;
+          expect(res.status).to.equal(201);
+          models.Task.findAll({
+            where: {
+              RuminationId: res.body.id
+            }
+          }).then(function(tasks) {
+            /**
+             * Make sure we have at least 1 delivery date
+             */
+            expect(deliveryTimes).not.to.equal(0);
+            expect(tasks).not.to.equal(null);
+            expect(tasks.length).to.equal(deliveryTimes.length);
+            for (var i = 0; i < tasks.length; i++) {
+              expect(tasks[i].RuminationId).to.equal(res.body.id);
+            }
             done();
           });
         });

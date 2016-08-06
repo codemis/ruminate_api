@@ -6,6 +6,7 @@
     'jasmine': true
   },
   'rules': {
+    'no-console': 0,
     'array-callback-return': 2,
     'curly': 1,
     'dot-notation': 1,

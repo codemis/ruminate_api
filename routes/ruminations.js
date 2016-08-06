@@ -10,6 +10,11 @@
  */
 var _ = require('underscore');
 /**
+ * Include the moment library
+ * @param  {Object}
+ */
+var moment = require('moment');
+/**
  * Get the objectIsEmpty Utility
  *
  * @param {Object}
@@ -71,8 +76,13 @@ module.exports = function (restify, server, models) {
       if (status === 201) {
         res.header('x-api-key', req.headers['x-api-key']);
         if (rumination) {
-          res.header('location', '/consumers/ruminations/'+rumination.id);
-          res.send(status, rumination.toResponse());
+          /**
+           * Create the Tasks to be handled later
+           */
+          controller.createPushTasks(rumination, consumer.pushDeliveryTimes(moment(), 10), function() {
+            res.header('location', '/consumers/ruminations/'+rumination.id);
+            res.send(status, rumination.toResponse());
+          });
         } else {
           res.send(500, { 'error': 'Internal Server Error. The server encountered an unexpected condition.' });
         }
@@ -386,6 +396,28 @@ function RuminationsController(models) {
         callback(400, error.message);
       });
     }
+  };
+
+  /**
+   * Create all the Push Tasks so we can notify changes to the Ruminations at the right time
+   *
+   * @param  {Rumination}   rumination    The Rumination model
+   * @param  {Array}        deliveryDates An array of times to push the notification
+   * @param  {Function}     callback      Callback to run when finished
+   * @return {Void}
+   * @access public
+   */
+  controller.createPushTasks  = function(rumination, deliveryDates, callback) {
+    var tasks = [];
+    for (var i = 0; i < deliveryDates.length; i++) {
+      tasks.push({
+        RuminationId: rumination.id,
+        deliverOn: deliveryDates[i]
+      });
+    }
+    models.Task.bulkCreate(tasks).then(function() {
+      callback();
+    });
   };
 
   /**

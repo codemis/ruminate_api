@@ -1,3 +1,4 @@
 node_modules
 env.js
 db/config.json
+apple-push-dev.pem
