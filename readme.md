@@ -23,6 +23,8 @@ Notes
 
 Code structured inspired by [generator-restify](https://github.com/chris-l/generator-restify).
 
+Start Forever: NODE_ENV=production forever start --spinSleepTime 10000 index.js
+
 Issues
 ------
 

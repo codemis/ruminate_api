@@ -17,7 +17,7 @@ var models = require('../db/models/index');
  * Include the moment library
  * @param  {Object}
  */
-var moment = require('moment');
+var moment = require('moment-timezone');
 /**
  * Library for handling messaging Android cloud
  *

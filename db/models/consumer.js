@@ -15,7 +15,7 @@ var _ = require('underscore');
  * Include the moment library
  * @param  {Object}
  */
-var moment = require('moment');
+var moment = require('moment-timezone');
 
 module.exports = function(sequelize, DataTypes) {
   var Consumer = sequelize.define('Consumer',
