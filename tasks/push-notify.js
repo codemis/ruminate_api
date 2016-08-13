@@ -45,7 +45,7 @@ function PushNotifyTask() {
   apnConnection = new apn.Connection({
     cert: config.apple.certificate,
     passphrase: config.apple.passphrase,
-    production: config.apple.productionGateway,
+    production: config.apple.productionGateway
   });
   this.getTasks().then(function(tasks) {
     for (var i = 0; i < tasks.length; i++) {
@@ -88,6 +88,7 @@ PushNotifyTask.prototype.handleTask = function(task) {
   }).then(function(rumination) {
     // Create the response
     var question =  self.getRandomQuestion();
+    var consumer = rumination.Consumer;
     var response = {
       questionTheme: question.theme,
       questionContent: question.question,
@@ -95,11 +96,13 @@ PushNotifyTask.prototype.handleTask = function(task) {
     };
     rumination.createResponse(response).then(function() {
       // Push notify the user
-      var platform = rumination.Consumer.devicePlatform.toLowerCase();
-      if (platform === 'android') {
-        self.pushAndroid(rumination.Consumer, question);
-      } else if (platform === 'ios') {
-        self.pushApple(rumination.Consumer, question);
+      if ((consumer.pushReceive) && (consumer.pushToken !== '') && (consumer.pushToken !== 'pending')) {
+        var platform = consumer.devicePlatform.toLowerCase();
+        if (platform === 'android') {
+          self.pushAndroid(consumer, question);
+        } else if (platform === 'ios') {
+          self.pushApple(consumer, question);
+        }
       }
       // Delete the task
       task.destroy();
@@ -222,15 +225,15 @@ PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
   if (config.android.apiKey !== '') {
     var gcmObject = new gcm.AndroidGcm(config.android.apiKey);
     var message = new gcm.Message({
-        registration_ids: [consumer.pushToken],
-        data: {
-            message: question.question,
-            title: 'Can We Ask You a Question?',
-            vibrate: 1,
-            sound: 'default'
-        }
+      registration_ids: [consumer.pushToken],
+      data: {
+        message: question.question,
+        title: 'Can We Ask You a Question?',
+        vibrate: 1,
+        sound: 'default'
+      }
     });
-    gcmObject.send(message, function(err, response) {
+    gcmObject.send(message, function(err) {
       if (err) {
         console.log('Error: ' + err);
       } else {
