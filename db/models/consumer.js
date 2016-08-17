@@ -150,15 +150,15 @@ module.exports = function(sequelize, DataTypes) {
        */
       pushDeliveryTimes: function(startTimestamp, max) {
         var timestamps = [];
+        var deliveryTime = startTimestamp.clone();
         var threshold = startTimestamp.clone().tz(this.pushTimezone).hour(21).minute(0).second(0);
-        var deliveryTime = startTimestamp;
         for (var i = 1; i <= max; i++) {
           deliveryTime.add(this.pushInterval, 'seconds');
           if (deliveryTime.clone().tz(this.pushTimezone).isBefore(threshold)) {
             /**
              * Convert to UTC
              */
-            timestamps.push(deliveryTime.clone().utc().format());
+            timestamps.push(deliveryTime.utc().format());
           }
         }
         return timestamps;
