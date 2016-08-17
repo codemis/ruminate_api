@@ -31,6 +31,12 @@ var gcm = require('android-gcm');
  */
 var apn = require('apn');
 /**
+ * Library for handling Promises
+ *
+ * @type {Object}
+ */
+var Q = require('q');
+/**
  * The APN connection to use
  *
  * @type {Object}
@@ -49,9 +55,15 @@ function PushNotifyTask() {
     production: config.apple.productionGateway
   });
   this.getTasks().then(function(tasks) {
+    var promises = [];
     for (var i = 0; i < tasks.length; i++) {
-      self.handleTask(tasks[i]);
+      promises.push(self.handleTask(tasks[i]));
     }
+    Q.all(promises).then(function() {
+      if(apnConnection) {
+        apnConnection.shutdown();
+      }
+    });
   });
 }
 /**

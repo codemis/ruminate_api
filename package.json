@@ -25,6 +25,7 @@
     "moment-timezone": "^0.5.5",
     "pg": "^4.5.1",
     "pg-hstore": "^2.3.2",
+    "q": "^1.4.1",
     "randomstring": "^1.1.4",
     "restify": "^4.0.4",
     "restify-errors": "^4.2.0",
