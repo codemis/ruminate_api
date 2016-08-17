@@ -93,6 +93,7 @@ PushNotifyTask.prototype.getTasks = function() {
  */
 PushNotifyTask.prototype.handleTask = function(task) {
   var self = this;
+  var deferred = Q.defer();
   // Find the Rumination and Consumer
   models.Rumination.findById(task.RuminationId, {
     include: [models.Consumer]
@@ -110,15 +111,22 @@ PushNotifyTask.prototype.handleTask = function(task) {
       if ((consumer.pushReceive) && (consumer.pushToken !== '') && (consumer.pushToken !== 'pending')) {
         var platform = consumer.devicePlatform.toLowerCase();
         if (platform === 'android') {
-          self.pushAndroid(consumer, question);
+          self.pushAndroid(consumer, question).then(function() {
+            task.destroy();
+            deferred.resolve();
+          });
         } else if (platform === 'ios') {
-          self.pushApple(consumer, question);
+          self.pushApple(consumer, question).then(function() {
+            task.destroy();
+            deferred.resolve();
+          });
+        } else {
+          deferred.resolve();
         }
       }
-      // Delete the task
-      task.destroy();
     });
   });
+  return deferred.promise;
 };
 /**
  * Pick a random question
@@ -233,6 +241,7 @@ PushNotifyTask.prototype.getQuestions = function () {
  * @access public
  */
 PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
+  var deferred = Q.defer();
   if (config.android.apiKey !== '') {
     var gcmObject = new gcm.AndroidGcm(config.android.apiKey);
     var message = new gcm.Message({
@@ -247,11 +256,16 @@ PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
     gcmObject.send(message, function(err) {
       if (err) {
         console.log('Error: ' + err);
+        deferred.reject();
       } else {
         console.log('Sent message to API key ' + consumer.apiKey);
+        deferred.resolve();
       }
     });
+  } else {
+    deferred.resolve();
   }
+  return deferred.promise;
 };
 /**
  * Send a push notification to an Apple device
@@ -262,6 +276,7 @@ PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
  * @access public
  */
 PushNotifyTask.prototype.pushApple = function(consumer, question) {
+  var deferred = Q.defer();
   if (config.apple.certificate) {
     var myDevice = new apn.Device(consumer.pushToken);
     var note = new apn.Notification();
@@ -276,8 +291,16 @@ PushNotifyTask.prototype.pushApple = function(consumer, question) {
 
     if(apnConnection) {
       apnConnection.pushNotification(note, myDevice);
+      apnConnection.on('completed', function () {
+        deferred.resolve();
+      });
+    } else {
+      deferred.reject();
     }
+  } else {
+    deferred.resolve();
   }
+  return deferred.promise;
 };
 
 new PushNotifyTask();
