@@ -158,7 +158,7 @@ module.exports = function(sequelize, DataTypes) {
             /**
              * Convert to UTC
              */
-            timestamps.push(deliveryTime.clone().tz(this.pushTimezone).format());
+            timestamps.push(deliveryTime.clone().utc().format());
           }
         }
         return timestamps;
