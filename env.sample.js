@@ -12,7 +12,8 @@ module.exports = function() {
       },
       apple: {
         productionGateway: false,
-        certificate: '',
+        certificate: path.join('.', 'cert.pem'),
+        key: path.join('.', 'key.pem'),
         passphrase: ''
       },
       port: 8080
@@ -25,7 +26,8 @@ module.exports = function() {
       },
       apple: {
         productionGateway: true,
-        certificate: '',
+        certificate: path.join('.', 'cert.pem'),
+        key: path.join('.', 'key.pem'),
         passphrase: ''
       },
       port: 8080
@@ -38,7 +40,8 @@ module.exports = function() {
       },
       apple: {
         productionGateway: false,
-        certificate: '',
+        certificate: path.join('.', 'cert.pem'),
+        key: path.join('.', 'key.pem'),
         passphrase: ''
       },
       port: 8080

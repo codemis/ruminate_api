@@ -43,7 +43,8 @@ function PushNotifyTask() {
    * Initialize APN
    */
   apnConnection = new apn.Connection({
-    cert: config.apple.certificate,
+    cert:       config.apple.certificate,
+    key:        config.apple.key,
     passphrase: config.apple.passphrase,
     production: config.apple.productionGateway
   });
@@ -69,8 +70,6 @@ PushNotifyTask.prototype.getTasks = function() {
         $gte: startDate
       }
     }
-  }).then(function(tasks) {
-    return tasks;
   });
 };
 /**
