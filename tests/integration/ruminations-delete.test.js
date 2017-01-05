@@ -129,7 +129,7 @@ describe('Ruminations:', function () {
       });
     });
 
-    it('should require a valid ruminationId in the URL', function () {
+    it('should require a valid ruminationId in the URL', function (done) {
       api.delete('/consumers/ruminations/99999919')
       .send({})
       .set('Accept', 'application/json')
