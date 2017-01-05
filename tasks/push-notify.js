@@ -244,6 +244,7 @@ PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
   var deferred = Q.defer();
   if (config.android.apiKey !== '') {
     var gcmObject = new gcm.AndroidGcm(config.android.apiKey);
+    /*eslint camelcase: 0*/
     var message = new gcm.Message({
       registration_ids: [consumer.pushToken],
       data: {

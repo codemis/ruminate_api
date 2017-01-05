@@ -93,7 +93,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should require the device.uuid', function () {
+    it('should require the device.uuid', function (done) {
       var consumer = {
         "device": {
           "model": "Nexus 7",
@@ -120,7 +120,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should require the push.receive', function () {
+    it('should require the push.receive', function (done) {
       var consumer = {
         "device": {
           "model": "Nexus 7",
@@ -146,7 +146,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should require the push.interval', function () {
+    it('should require the push.interval', function (done) {
       var consumer = {
         "device": {
           "model": "Nexus 7",
@@ -173,7 +173,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should require the push.timezone', function () {
+    it('should require the push.timezone', function (done) {
       var consumer = {
         "device": {
           "model": "Nexus 7",
@@ -200,7 +200,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should require the push.token', function () {
+    it('should require the push.token', function (done) {
       var consumer = {
         "device": {
           "model": "Nexus 7",

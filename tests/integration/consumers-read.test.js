@@ -72,7 +72,7 @@ describe('Consumers:', function () {
       });
     });
 
-    it('should throw an error if you do not provide an API key', function () {
+    it('should throw an error if you do not provide an API key', function (done) {
       api.get('/consumers')
       .send({})
       .set('Accept', 'application/json')
