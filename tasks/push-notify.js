@@ -48,7 +48,7 @@ function PushNotifyTask() {
   /**
    * Initialize APN
    */
-  apnConnection = new apn.Connection({
+  apnConnection = new apn.Provider({
     cert:       config.apple.certificate,
     key:        config.apple.key,
     passphrase: config.apple.passphrase,
@@ -279,7 +279,6 @@ PushNotifyTask.prototype.pushAndroid = function(consumer, question) {
 PushNotifyTask.prototype.pushApple = function(consumer, question) {
   var deferred = Q.defer();
   if (config.apple.certificate) {
-    var myDevice = new apn.Device(consumer.pushToken);
     var note = new apn.Notification();
     /**
      * Expires 1 hour from now.
@@ -289,10 +288,10 @@ PushNotifyTask.prototype.pushApple = function(consumer, question) {
     note.sound = 'default';
     note.alert = question.question;
     note.payload = {'messageFrom': 'Ruminate'};
+    note.topic = 'com.missionaldigerati.ruminate';
 
     if(apnConnection) {
-      apnConnection.pushNotification(note, myDevice);
-      apnConnection.on('completed', function () {
+      apnConnection.send(note, consumer.pushToken).then(function() {
         deferred.resolve();
       });
     } else {
